@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 763175048cd690149b8cc64ab17883d7
+timeCreated: 1493781059
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25709
+  packageName: Click To Add
+  packageVersion: 2.12
+  assetPath: Assets/ClickToAdd/Resources/ClickToAdd.guiskin
+  uploadId: 464804

@@ -1,0 +1,176 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &3727780161279551510
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.13082407
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.036161385
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.05226485
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.53
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.416
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.723088
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.24897908
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.6092202
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.20977126
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 38
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 80.23
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_Name
+      value: SledgeHammer
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      propertyPath: m_TagString
+      value: MeleeSledge
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2456658724717139582}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6906566233867822467}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 049a99caf0a3ce24e8670228d4eabb69,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5980488464965840278}
+  m_SourcePrefab: {fileID: 100100000, guid: 049a99caf0a3ce24e8670228d4eabb69, type: 3}
+--- !u!1 &4574203253610108231 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 049a99caf0a3ce24e8670228d4eabb69,
+    type: 3}
+  m_PrefabInstance: {fileID: 3727780161279551510}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &2456658724717139582
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4574203253610108231}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.93, y: 3.59, z: 4.49}
+  m_Center: {x: 0, y: 22.61, z: 0}
+--- !u!54 &6906566233867822467
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4574203253610108231}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 2
+--- !u!114 &5980488464965840278
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4574203253610108231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0ed699ba3804ca4aa01981c73c16bf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  decalMaterial: {fileID: 2100000, guid: 76d42ac1d11f8094684ffbf4e116e215, type: 2}
+  hitRecoverTime: 0.5
+  decalFadeTime: 10

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: c0ea6656cbc153b40a8699445c973618
+timeCreated: 1507932355
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Materials/FabricWhite_01.mat
+  uploadId: 290123

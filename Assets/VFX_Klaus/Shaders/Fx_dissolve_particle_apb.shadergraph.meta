@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: f4f96caa19b27524687b441f720f958f
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 625f186215c104763be7675aa2d941aa, type: 3}
+AssetOrigin:
+  serializedVersion: 1
+  productId: 196130
+  packageName: Stylized Element Splash Package vol.1
+  packageVersion: 1.4
+  assetPath: Assets/VFX_Klaus/Shaders/Fx_dissolve_particle_apb.shadergraph
+  uploadId: 559828

@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 10e912fd95b34488685d9236ff3af298
+timeCreated: 1482613191
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 25709
+  packageName: Click To Add
+  packageVersion: 2.12
+  assetPath: Assets/ClickToAdd/Editor/NoiseMapGenerator.cs
+  uploadId: 464804

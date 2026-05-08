@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1802b89c79ade6646b2dbb98f27e2932
+timeCreated: 1507932358
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Materials/RugWhite_01.mat
+  uploadId: 290123

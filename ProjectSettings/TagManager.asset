@@ -3,7 +3,19 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - GrapplePoint
+  - GrapplePawnPosition
+  - InteractCollider
+  - Chore
+  - FollowBox
+  - lb_bird
+  - lb_groundTarget
+  - lb_perchTarget
+  - GrappleFromPoint
+  - InvisibleBarrier
+  - MeleeSledge
+  - ChainLink
   layers:
   - Default
   - TransparentFX
@@ -13,9 +25,9 @@ TagManager:
   - UI
   - 
   - 
+  - BirdTarget
   - 
-  - 
-  - 
+  - Player
   - 
   - 
   - 

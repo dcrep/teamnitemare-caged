@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 032610bd1a8babf4eb2b82d6a0097fb2
+timeCreated: 1507938077
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Prefabs/Standard/Bedroom/ShirtStack_b_01.prefab
+  uploadId: 290123

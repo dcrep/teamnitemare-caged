@@ -1,0 +1,3 @@
+The rain is really coming down.
+I wonder if that's what woke me up...
+For some reason, being inside during a thunderstorm always makes me feel so isolated. It's really creepy.

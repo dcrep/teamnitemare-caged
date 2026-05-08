@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 2dfa1a7283ebe7e478276f820423cbe7
+timeCreated: 1507941193
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Prefabs/Custom/Bedroom/HangedShirt_a_01.prefab
+  uploadId: 290123

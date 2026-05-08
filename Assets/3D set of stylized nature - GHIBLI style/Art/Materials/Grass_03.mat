@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6968949597903838000
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 10
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Grass_03
+  m_Shader: {fileID: -6465566751694194690, guid: 9a1af001c86e4774e897f71c5639e12b,
+    type: 3}
+  m_Parent: {fileID: 2100000, guid: c8dc98ee276a7c44d8f282a0ad072bdd, type: 2}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords:
+  - _EMISSION
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses:
+  - MOTIONVECTORS
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _Wind_Gradient: 0.295
+    - _Wind_Speed: 2
+    - _Wind_Strength: 0.5
+    m_Colors:
+    - _Bottom_Color: {r: 0.13725486, g: 0.49803913, b: 0.31372547, a: 0}
+    - _Color_Variation: {r: 0.29334286, g: 0.6037736, b: 0.34641126, a: 1}
+    - _Top_Color: {r: 0.14509797, g: 0.454902, b: 0.12941176, a: 0}
+    - _Variation_Offset: {r: 0, g: 0, b: 0, a: 0}
+    - _Wind_Color: {r: 0.34117648, g: 0.6313726, b: 0.45514235, a: 0.83137256}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1
