@@ -40,14 +40,14 @@ public class TaskGroup
             // Race condition workaround:
             var uid = questComponent.uniqueID ?? questComponent.GetComponent<UniqueID>();
             if (uid == null) { Debug.LogError($"Missing UniqueID on {questComponent.name}"); continue; }
-            Debug.Log("Q-> uniqueID: " + uid.ID + ", name: " + questComponent.gameObject.name + ", tag: " + questComponent.questTaskTag + ", isCollectible: " + questComponent.isCollectible);
+            Debug.Log("Q->ConvertToQuestInfo uniqueID: " + uid.ID + ", name: " + questComponent.gameObject.name + ", tag: " + questComponent.questTaskTag + ", isCollectible: " + questComponent.isCollectible);
             questInfo.questTasks.Add(new QuestTask {
                 taskUniqueId = uid.ID, taskName = questComponent.gameObject.name,
                 questTaskTag = questComponent.questTaskTag, isCollectibleTask = questComponent.isCollectible,
                 isCompleted = actedOnComplete, taskDescription = "",
                 taskValue = 1, taskMaxValue = 1, oneTimeCompletion = true, requiredTasks = null});
         }
-        Debug.Log("Converted TaskGroup: " + taskGroupName + " to QuestInfo with " + questInfo.questTasks.Count + " tasks for scene: " + SceneManager.GetActiveScene().name);
+        Debug.Log("Q->Converted TaskGroup: " + taskGroupName + " to QuestInfo with " + questInfo.questTasks.Count + " tasks for scene: " + SceneManager.GetActiveScene().name);
         return questInfo;
     }
     public QuestTask ConvertToQuestTask(int index)
@@ -96,7 +96,7 @@ public class Quest : MonoBehaviour, ISaveable
 
     void OnEnable()
     {
-        Debug.Log("UniqueId: " + questUniqueId.ID + " for quest: " + QuestName + " in scene: " + sceneName);
+        Debug.Log("Q->UniqueId: " + questUniqueId.ID + " for quest: " + QuestName + " in scene: " + sceneName);
         if (!questAdded)
         {
             Debug.Log("Quest->Start: Adding quest with name: " + QuestName + " to QuestManager from Start() in scene: " + sceneName);

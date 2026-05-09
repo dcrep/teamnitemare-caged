@@ -147,6 +147,9 @@ public class InkleDialogue : MonoBehaviour
 
         uiLayout = dialoguePanel.GetComponent<InkleUIPrefab>().layout;
         
+    //! prefab structure should be ignored and maybe have a script
+    // that acts as an interface for communication from this script?
+    // ! OR we will have to adjust to allow speaker and portrait to be separate from speaker object..
     // prefab structure:
     // InklePanel (Canvas)
     // - InkleText (TextMeshProUGUI)
@@ -188,7 +191,7 @@ public class InkleDialogue : MonoBehaviour
         //     portraitImages.Add(speakerPanel.transform.Find("PortraitFrame").Find("PortraitImage").GetComponent<Image>());
         //     displayNameText.Add(speakerPanel.transform.Find("SpeakerFrame").Find("DisplayNameText").GetComponent<TextMeshProUGUI>());
         // }
-        Debug.Log("InkleDialogue: Loaded dialogue panel prefab and assigned UI components. Hiding dialogue panel.");
+        Debug.Log("InkD-> Loaded dialogue panel prefab and assigned UI components. Hiding dialogue panel.");
         dialoguePanel.SetActive(false);
     }
 

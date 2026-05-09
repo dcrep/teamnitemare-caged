@@ -52,6 +52,10 @@ public class GameManager : MonoBehaviour
     bool mouseHideForGameScenes = true;
     bool timeScaleFreezeForPause = true;
 
+    public void Init(InputManager _inputManager)
+    {
+        inputManager = _inputManager;
+    }
 
     // Awake - Called before *FIRST* Scene, not destroyed or recreated on other Scene loads
     void Awake()
@@ -94,7 +98,12 @@ public class GameManager : MonoBehaviour
     void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, LoadSceneMode mode)
     {
         Debug.Log("GM->OnSceneLoaded(): " + scene.name);
-        //VerifyCurrentScene();
+        // Missing Scene script component; warn and check for scene in scenesSO
+        if (gameState.currentSceneScript == null)
+        {
+            Debug.LogWarning("GM->OnSceneLoaded(): currentSceneScript is null for scene: " + scene.name + "; add Scene component to scene to ensure proper initialization.");
+            VerifyCurrentScene();
+        }
     }
     // sceneUnloaded:
     // fires after scene is unloaded from memory. OnDestroy() already run for objects
@@ -281,7 +290,7 @@ public class GameManager : MonoBehaviour
         {
             if (gameState.currentScene != Scenes.MainMenu)
             {
-                Debug.Log("currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.MainMenu.ToString());
+                Debug.Log("GM->currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.MainMenu.ToString());
                 gameState.currentScene = Scenes.MainMenu;
                 gameState.currentGameState = GameStates.UI;
             }
@@ -290,7 +299,7 @@ public class GameManager : MonoBehaviour
         {
             if (gameState.currentScene != Scenes.Game)
             {
-                Debug.Log("currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.Game.ToString());
+                Debug.Log("GM->currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.Game.ToString());
                 gameState.currentScene = Scenes.Game;
                 gameState.currentGameState = GameStates.Playing;
                 // Assuming gameScenes are ordered by level and start at Level1
@@ -301,7 +310,7 @@ public class GameManager : MonoBehaviour
         {
             if (gameState.currentScene != Scenes.GameOver)
             {
-                Debug.Log("currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.GameOver.ToString());
+                Debug.Log("GM->currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.GameOver.ToString());
                 gameState.currentScene = Scenes.GameOver;
                 gameState.currentGameState = GameStates.GameOver;
             }
@@ -310,7 +319,7 @@ public class GameManager : MonoBehaviour
         {
             if (gameState.currentScene != Scenes.DCExperiments)
             {
-                Debug.Log("currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.DCExperiments.ToString());
+                Debug.Log("GM->currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.DCExperiments.ToString());
                 gameState.currentScene = Scenes.Game; // !!
                 gameState.currentGameState = GameStates.Playing;
             }
@@ -319,7 +328,7 @@ public class GameManager : MonoBehaviour
         {
             if (gameState.currentScene != Scenes.UITest)
             {
-                Debug.Log("currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.UITest.ToString());
+                Debug.Log("GM->currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.UITest.ToString());
                 gameState.currentScene = Scenes.Game; // !!
                 gameState.currentGameState = GameStates.Playing;
             }
@@ -328,7 +337,7 @@ public class GameManager : MonoBehaviour
         {
             if (gameState.currentScene != Scenes.UILayout)
             {
-                Debug.Log("currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.UILayout.ToString());
+                Debug.Log("GM->currentScene mismatch; currentScene set to " + gameState.currentScene.ToString() + "; updating to " + Scenes.UILayout.ToString());
                 gameState.currentScene = Scenes.UILayout;
                 gameState.currentGameState = GameStates.UI;
             }

@@ -21,14 +21,16 @@ public class BootInitializer : MonoBehaviour
         GameObject audioManager = new("AudioManager");
         audioManager.AddComponent<AudioManager>();
         //AudioManager am = audioManager.GetComponent<AudioManager>();
-        AudioManager.uiAudioSourcesSO = Resources.Load<UIAudioSourcesSO>("UIAudioSourcesSO");
+        //uiAudioSourcesSO = Resources.Load<UIAudioSourcesSO>("UIAudioSourcesSO");
+        UIAudioSourcesSO uiAudioSourcesSO = Resources.Load<UIAudioSourcesSO>("UIAudioSourcesSO");
+        AudioManager.Init(uiAudioSourcesSO);
         DontDestroyOnLoad(audioManager);
         Debug.Log("[BI]: AudioManager initialized.");
 
         // GameManager create object + script component (can also be done in Script
         // with RuntimeInitializeOnLoadMethod, but this way keeps it centralized)
         GameObject gameManagerObject = new("GameManager");        
-        gameManagerObject.AddComponent<GameManager>();
+        GameManager gameManager = gameManagerObject.AddComponent<GameManager>();
         //GameManager gm =gameManagerObject.GetComponent<GameManager>();        
         DontDestroyOnLoad(gameManagerObject);
         Debug.Log("[BI]: GameManager initialized..");
@@ -42,6 +44,7 @@ public class BootInitializer : MonoBehaviour
         Debug.Log("[BI]: InputManager initialized..");
 
 		// GameManager - reference InputManager
-        gameManagerObject.GetComponent<GameManager>().inputManager = inputManager;
+        //gameManager.inputManager = inputManager;
+        gameManager.Init(inputManager);
     } 
 }
