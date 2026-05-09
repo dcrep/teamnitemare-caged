@@ -93,6 +93,12 @@ public class SceneQuestInfo
     public List<string> questUniqueIdCompletionInOrder;
     public List<string> taskUniqueIdCompletionInOrder;
 }
+[Serializable]
+public class ScenesVisitInfo
+{
+    public string sceneName;
+    public int visits;
+}
 
 [Serializable]
 public class GameState
@@ -107,7 +113,7 @@ public class GameState
 
     // unique scene names list
     
-    public List<string> sceneNames = new List<string>();
+    public List<ScenesVisitInfo> scenesVisitInfo = new List<ScenesVisitInfo>();
 
     public Scenes currentScene = Scenes.LoadingScreen;
     public Scenes previousScene = Scenes.LoadingScreen;
@@ -141,7 +147,16 @@ public class GameState
                 Debug.LogError("GameState->Initialize: Failed to load ScenesSO from Resources. Make sure there is a ScenesSO asset in a Resources folder.");
             }
         }
-        sceneNames = scenesSO.GetAllScenes();
+        // get names of all scenes and initialize visit counts to 0        
+        scenesVisitInfo = new List<ScenesVisitInfo>();
+        var allScenes = scenesSO.GetAllScenes();
+        foreach (var sceneName in allScenes)
+        {
+            if (!string.IsNullOrEmpty(sceneName))
+            {
+                scenesVisitInfo.Add(new ScenesVisitInfo { sceneName = sceneName, visits = 0 });
+            }
+        }
     }
     public void ResetGameState()
     {
@@ -161,32 +176,38 @@ public class GameState
         numCurrentLevelObjectivesCompleted = 0;
         totalCurrentLevelObjectives = 0;
         currentLevelCompleted = false;
+        // reset visit counts to 0
+        foreach (var sceneVisitInfo in scenesVisitInfo)
+        {
+            sceneVisitInfo.visits = 0;
+        }
     }
 
 #region Scene Management
     // Enforces one scene in list and optionally visit order
     public void AddScene(string sceneName, bool addToVisitOrder = true)
     {
-        int index = sceneNames.FindIndex(s => s == sceneName);
+        int index = scenesVisitInfo.FindIndex(s => s.sceneName == sceneName);
         if (index == -1)
         {
-            sceneNames.Add(sceneName);
-            index = sceneNames.Count - 1;
+            scenesVisitInfo.Add(new ScenesVisitInfo { sceneName = sceneName, visits = 0 });
+            index = scenesVisitInfo.Count - 1;
             //Debug.Log("Added scene: " + sceneName + " to game state with index: " + index);
         }
         if (addToVisitOrder)
         {
             scenesInOrderOfVisit.Add(index);
+            scenesVisitInfo[index].visits++;
         }
     }
     public bool SceneExists(string sceneName)
     {
-        return sceneNames.Contains(sceneName);
+        return scenesVisitInfo.Exists(s => s.sceneName == sceneName);
     }
     public int SceneIndex(string sceneName)
     {
         // returns index of scene if found, otherwise -1
-        return sceneNames.FindIndex(s => s == sceneName);
+        return scenesVisitInfo.FindIndex(s => s.sceneName == sceneName);
     }
     public int GetSceneVisitCount(string sceneName)
     {
@@ -196,16 +217,18 @@ public class GameState
             Debug.LogError("GetSceneVisitCount: Scene: " + sceneName + " not found in game state.");
             return 0;
         }
-        return scenesInOrderOfVisit.FindAll(s => s == index).Count;
+        return scenesVisitInfo[index].visits;
+        //return scenesInOrderOfVisit.FindAll(s => s == index).Count;
     }
     public int GetSceneVisitCount(int sceneIndex)
     {
-        if (sceneIndex < 0 || sceneIndex >= sceneNames.Count)
+        if (sceneIndex < 0 || sceneIndex >= scenesVisitInfo.Count)
         {
             Debug.LogError("GetSceneVisitCount: Scene index: " + sceneIndex + " is out of bounds in game state.");
             return 0;
         }
-        return scenesInOrderOfVisit.FindAll(s => s == sceneIndex).Count;
+        return scenesVisitInfo[sceneIndex].visits;
+        //return scenesInOrderOfVisit.FindAll(s => s == sceneIndex).Count;
     }
 #endregion Scene Management
 

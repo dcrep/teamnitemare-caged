@@ -10,31 +10,35 @@ public class UIManager : MonoBehaviour
 
     //public AnimationManager animationManager;
 
-
     void Awake()
     {
-        // if (animationManager == null)
-        // {
-        //     animationManager = gameObject.GetComponent<AnimationManager>();
-        //     if (animationManager == null)
-        //     {
-        //         animationManager = gameObject.AddComponent<AnimationManager>();
-        //     }
-        // }
-        if (UICanvas == null)
-        {
-            UICanvas = GameObject.Find("Canvas");
-            if (UICanvas == null)
-            {
-                Debug.LogError("UI->Canvas not found for UIManager!");
-            }
-        }
+        // Defer canvas resolution to a safe helper so UIManager works even when
+        // the Canvas is created later in the scene lifecycle. We still try to
+        // load the prefab here.
         pauseMenuPrefab = Resources.Load<GameObject>("Prefabs/" + "PauseModalDialog");
         if (pauseMenuPrefab == null)
         {
             Debug.Log("UI->Pause menu prefab not found!");
             return;
         }
+    }
+
+    // Try to find an existing Canvas GameObject. Do NOT create one here; return
+    // null if none found. Caller (e.g. PauseMenuOpen) should handle absence.
+    GameObject GetCanvasIfExists()
+    {
+        if (UICanvas != null)
+            return UICanvas;
+
+        Canvas found = Object.FindFirstObjectByType<Canvas>();
+        if (found != null)
+        {
+            UICanvas = found.gameObject;
+            return UICanvas;
+        }
+
+        // Do not search by name (unsafe). If no Canvas component exists, signal caller to handle it.
+        return null;
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -79,10 +83,10 @@ public class UIManager : MonoBehaviour
                     Debug.LogError("UI->Pause menu prefab not found!");
                     return false;
                 }
-                var canvas = UICanvas;  //GameObject.Find("Canvas");
+                var canvas = GetCanvasIfExists();
                 if (canvas == null)
                 {
-                    Debug.LogError("UI->Canvas not found for Pause Menu!");
+                    Debug.LogError("UI->Canvas not found for Pause Menu! Aborting open — ensure a Canvas exists in the scene before opening the pause menu.");
                     return false;
                 }
                 pauseMenuInstance.transform.SetParent(canvas.transform, false);

@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviour
     public bool restartCurrentSceneCalled = false;
     public bool hubSubSceneVisited = false;
 
+    public bool restoreSavedGameStateOnSceneLoad = false;
+
     bool mouseHideForGameScenes = true;
     bool timeScaleFreezeForPause = true;
 

@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using Unity.VisualScripting;
+using UnityEngine.UI;
 
 // TODO: 'hubconnectedscene' minigames (going IN to a minigame scene, returing BACK to this scene)
 // TODO: Restart should reset tasks/quests, which means using visit # in GameState
@@ -55,6 +56,8 @@ public class Scene : MonoBehaviour
     bool returnedToHubFromScene = false;
     public bool ReturnedToHubFromScene => returnedToHubFromScene;
 
+    bool restoredSavedGameState = false;
+    public bool RestoredSavedGameState => restoredSavedGameState;
     
     void Awake()
     {
@@ -64,6 +67,8 @@ public class Scene : MonoBehaviour
         sceneWasReloaded = GameManager.Instance.reloadCurrentSceneCalled;
         sceneWasRestarted = GameManager.Instance.restartCurrentSceneCalled;
         returnedToHubFromScene = GameManager.Instance.hubSubSceneVisited;
+        //TODO: restoring game state
+        restoredSavedGameState = GameManager.Instance.restoreSavedGameStateOnSceneLoad;
 
         GameManager.Instance.SceneAwake(this);
 
@@ -137,7 +142,31 @@ public class Scene : MonoBehaviour
                 }
             }
         }
- 
+
+        // ensure there is a canvas and and EventSystem
+        if (FindFirstObjectByType<Canvas>() == null)
+        {
+            GameObject canvasGO = new GameObject("Canvas");
+            canvasGO.AddComponent<Canvas>().renderMode = RenderMode.ScreenSpaceOverlay;
+            canvasGO.AddComponent<CanvasScaler>();
+            canvasGO.AddComponent<GraphicRaycaster>();
+            Debug.Log("Scene->Awake: No Canvas found in Scene: " + sceneName + ", created new Canvas.");
+        }
+        if (FindFirstObjectByType<UnityEngine.EventSystems.EventSystem>() == null)
+        {
+            GameObject eventSystemGO = new GameObject("EventSystem");
+            eventSystemGO.AddComponent<UnityEngine.EventSystems.EventSystem>();
+
+            // Use the new Input System UI input module (namespace: UnityEngine.InputSystem.UI)
+            // Fully-qualified name used to avoid needing an extra using directive here.
+            eventSystemGO.AddComponent<UnityEngine.InputSystem.UI.InputSystemUIInputModule>();
+
+            // NOTE: Adding both input modules can cause conflicts. If you're using the old
+            // input system, remove the line above and keep the StandaloneInputModule instead.
+            //eventSystemGO.AddComponent<UnityEngine.EventSystems.StandaloneInputModule>();
+
+            Debug.Log("Scene->Awake: No EventSystem found in Scene: " + sceneName + ", created new EventSystem.");
+        }
 
         onSceneAwake.Invoke();
         if (SceneWasReloaded)
