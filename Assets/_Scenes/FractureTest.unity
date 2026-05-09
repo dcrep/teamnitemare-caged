@@ -402,12 +402,20 @@ MonoBehaviour:
   isInteractable: 1
   isOneTimeUse: 0
   interactionCount: 0
+  interactionExitCount: 0
+  interactionCollider: {fileID: 0}
+  autoInteractOnColliderTrigger: 0
+  autoInteractOnColliderExitTrigger: 0
+  playerAutoInteractOrNullForAll: {fileID: 0}
+  triggerAutoInteractTagOrNullForAll: 
   billBoardObject: {fileID: 0}
   billBoardOffset: {x: 0, y: 2, z: 0}
   billBoardTextObject: {fileID: 0}
   billBoardTextOffset: {x: 0, y: 1, z: 0}
   billBoardInteractText: Interact
   showBillboardOnStart: 1
+  hideBillboardOnInteract: 1
+  showBillboardOnInteractExit: 1
   onInteract:
     m_PersistentCalls:
       m_Calls:
@@ -424,6 +432,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onInteractExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &132394270
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1090,12 +1101,20 @@ MonoBehaviour:
   isInteractable: 1
   isOneTimeUse: 0
   interactionCount: 0
+  interactionExitCount: 0
+  interactionCollider: {fileID: 0}
+  autoInteractOnColliderTrigger: 0
+  autoInteractOnColliderExitTrigger: 0
+  playerAutoInteractOrNullForAll: {fileID: 0}
+  triggerAutoInteractTagOrNullForAll: 
   billBoardObject: {fileID: 0}
   billBoardOffset: {x: 0, y: 2, z: 0}
   billBoardTextObject: {fileID: 0}
   billBoardTextOffset: {x: 0, y: 1, z: 0}
   billBoardInteractText: Interact
   showBillboardOnStart: 1
+  hideBillboardOnInteract: 1
+  showBillboardOnInteractExit: 1
   onInteract:
     m_PersistentCalls:
       m_Calls:
@@ -1112,6 +1131,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onInteractExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &684119772
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1252,12 +1274,20 @@ MonoBehaviour:
   isInteractable: 1
   isOneTimeUse: 0
   interactionCount: 0
+  interactionExitCount: 0
+  interactionCollider: {fileID: 0}
+  autoInteractOnColliderTrigger: 0
+  autoInteractOnColliderExitTrigger: 0
+  playerAutoInteractOrNullForAll: {fileID: 0}
+  triggerAutoInteractTagOrNullForAll: 
   billBoardObject: {fileID: 0}
   billBoardOffset: {x: 0, y: 2, z: 0}
   billBoardTextObject: {fileID: 0}
   billBoardTextOffset: {x: 0, y: 1, z: 0}
   billBoardInteractText: Interact
   showBillboardOnStart: 1
+  hideBillboardOnInteract: 1
+  showBillboardOnInteractExit: 1
   onInteract:
     m_PersistentCalls:
       m_Calls:
@@ -1274,6 +1304,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onInteractExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &740756250
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2413,12 +2446,20 @@ MonoBehaviour:
   isInteractable: 1
   isOneTimeUse: 1
   interactionCount: 0
+  interactionExitCount: 0
+  interactionCollider: {fileID: 0}
+  autoInteractOnColliderTrigger: 0
+  autoInteractOnColliderExitTrigger: 0
+  playerAutoInteractOrNullForAll: {fileID: 0}
+  triggerAutoInteractTagOrNullForAll: 
   billBoardObject: {fileID: 0}
   billBoardOffset: {x: 0, y: 2, z: 0}
   billBoardTextObject: {fileID: 0}
   billBoardTextOffset: {x: 0, y: 1, z: 0}
   billBoardInteractText: Interact
   showBillboardOnStart: 0
+  hideBillboardOnInteract: 1
+  showBillboardOnInteractExit: 1
   onInteract:
     m_PersistentCalls:
       m_Calls:
@@ -2446,6 +2487,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onInteractExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &1338003851
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2551,6 +2595,7 @@ MonoBehaviour:
   questTaskTag: 
   isCollectible: 0
   onceOnly: 1
+  destroyOnComplete: 0
 --- !u!114 &1338003856
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2603,12 +2648,20 @@ MonoBehaviour:
   isInteractable: 1
   isOneTimeUse: 1
   interactionCount: 0
+  interactionExitCount: 0
+  interactionCollider: {fileID: 0}
+  autoInteractOnColliderTrigger: 0
+  autoInteractOnColliderExitTrigger: 0
+  playerAutoInteractOrNullForAll: {fileID: 0}
+  triggerAutoInteractTagOrNullForAll: 
   billBoardObject: {fileID: 0}
   billBoardOffset: {x: 0, y: 2, z: 0}
   billBoardTextObject: {fileID: 0}
   billBoardTextOffset: {x: 0, y: 1, z: 0}
   billBoardInteractText: Interact
   showBillboardOnStart: 0
+  hideBillboardOnInteract: 1
+  showBillboardOnInteractExit: 1
   onInteract:
     m_PersistentCalls:
       m_Calls:
@@ -2636,6 +2689,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onInteractExit:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!65 &1350025397
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2741,6 +2797,7 @@ MonoBehaviour:
   questTaskTag: 
   isCollectible: 0
   onceOnly: 1
+  destroyOnComplete: 0
 --- !u!114 &1350025402
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2794,8 +2851,17 @@ MonoBehaviour:
   variableWatches:
   - variableName: nein
     triggerValueOrAll: 
+    onVariableMatch:
+      m_PersistentCalls:
+        m_Calls: []
   tagWatches:
   - tagName: blah
+    onTagFound:
+      m_PersistentCalls:
+        m_Calls: []
+  onTagsFound:
+    m_PersistentCalls:
+      m_Calls: []
   onDialogueStarted:
     m_PersistentCalls:
       m_Calls:
@@ -2857,7 +2923,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   playerMovementDisabledDuringDialogue: 1
-  playerMovementStopsDialogue: 0
 --- !u!4 &1380785757
 Transform:
   m_ObjectHideFlags: 0
@@ -3534,6 +3599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isActive: 1
   playerOrNullForAll: {fileID: 0}
+  triggerTagOrEmptyForAll: 
   onTrigger:
     m_PersistentCalls:
       m_Calls:
@@ -3573,6 +3639,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls: []
+  billBoardObject: {fileID: 0}
+  billBoardOffset: {x: 0, y: 2, z: 0}
+  billBoardTextObject: {fileID: 0}
+  billBoardTextOffset: {x: 0, y: 1, z: 0}
+  billBoardInteractText: Interact
+  showBillboardOnStart: 1
+  hideBillboardOnInteract: 1
+  showBillboardOnInteractExit: 1
+  triggerOnlyOnce: 0
   triggeredCount: 0
 --- !u!65 &1633843342
 BoxCollider:
@@ -3890,6 +3968,7 @@ MonoBehaviour:
   questTaskTag: 
   isCollectible: 0
   onceOnly: 1
+  destroyOnComplete: 0
 --- !u!114 &1754866090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4123,6 +4202,7 @@ MonoBehaviour:
   questTaskTag: 
   isCollectible: 0
   onceOnly: 1
+  destroyOnComplete: 0
 --- !u!114 &1822987217
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4736,6 +4816,7 @@ MonoBehaviour:
   questTaskTag: 
   isCollectible: 0
   onceOnly: 1
+  destroyOnComplete: 0
 --- !u!114 &2097072588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4999,6 +5080,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Fragment
+      objectReference: {fileID: 0}
+    - target: {fileID: 3086160513631953531, guid: 98459f26e0fd628419ef22f1eab27033,
+        type: 3}
+      propertyPath: id
+      value: 460402eca73827f478fc584cd2869550
       objectReference: {fileID: 0}
     - target: {fileID: 7462762564639690944, guid: 98459f26e0fd628419ef22f1eab27033,
         type: 3}

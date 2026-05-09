@@ -13,6 +13,8 @@ public class QuestComponent : MonoBehaviour
     public bool onceOnly = true;
     //public int count = 1;
 
+    public bool destroyOnComplete = false;
+
     private void Awake()
     {
         if (uniqueID == null)

@@ -6,6 +6,7 @@ public class Triggerable : MonoBehaviour, ISaveable
 {
     public bool isActive = true;
     [SerializeField] public GameObject playerOrNullForAll = null;
+    [SerializeField] public string triggerTagOrEmptyForAll = null;
     [SerializeField] public UnityEngine.Events.UnityEvent onTrigger;
     [SerializeField] public UnityEngine.Events.UnityEvent onTriggerExit;
 
@@ -22,7 +23,7 @@ public class Triggerable : MonoBehaviour, ISaveable
     //!!
     [SerializeField] bool hideBillboardOnInteract = true;
     [SerializeField] bool showBillboardOnInteractExit = true;
-    [SerializeField] bool triggerOnlyOnce = false;
+    [SerializeField] bool triggerOnlyOnce = true;
     
     public int triggeredCount = 0;
     bool isActiveInScene = false;
@@ -72,7 +73,9 @@ public class Triggerable : MonoBehaviour, ISaveable
     {
         if (isActive)
         {
-            if (playerOrNullForAll == null || other.gameObject == playerOrNullForAll)  
+            bool tagMatch = string.IsNullOrEmpty(triggerTagOrEmptyForAll) || other.gameObject.CompareTag(triggerTagOrEmptyForAll);
+            bool playerGOMatch = playerOrNullForAll == null || other.gameObject == playerOrNullForAll;
+            if (tagMatch && playerGOMatch)  
             {
                 objectTriggeredBy = other.gameObject;
                 onTrigger.Invoke();
@@ -88,22 +91,29 @@ public class Triggerable : MonoBehaviour, ISaveable
     {
         if (isActive && objectTriggeredBy == other.gameObject)
         {
-            if (playerOrNullForAll == null || other.gameObject == playerOrNullForAll)
+            // no need to check for tag or gameobject match here since we only care about the one that triggered the enter
+            onTriggerExit.Invoke();
+            objectTriggeredBy = null;
+
+            //triggeredCount++; // done on Enter
+            if (triggerOnlyOnce)
             {
-                onTriggerExit.Invoke();
-                // if (showBillboardOnInteractExit)
-                // {
-                //     SetBillboardVisibility(true);
-                // }
-                //inkStoryComponentOrNull?.ExitTriggerArea();
-            }            
-        }
+                isActive = false;
+            }
+            // if (showBillboardOnInteractExit)
+            // {
+            //     SetBillboardVisibility(true);
+            // }
+            //inkStoryComponentOrNull?.ExitTriggerArea();
+        }         
     }
+
 #region ISaveable implementation
     private class TriggerableData
     {
         public bool isActive;
         public bool isActiveInScene;
+        public bool triggerOnlyOnce;
         public int triggeredCount;
     }
 
@@ -113,6 +123,7 @@ public class Triggerable : MonoBehaviour, ISaveable
         {
             isActive = this.isActive,
             isActiveInScene = this.isActiveInScene,
+            triggerOnlyOnce = this.triggerOnlyOnce,
             triggeredCount = this.triggeredCount
         };
         return data;
@@ -123,6 +134,7 @@ public class Triggerable : MonoBehaviour, ISaveable
         {
             this.isActive = data.isActive;
             this.isActiveInScene = data.isActiveInScene;
+            this.triggerOnlyOnce = data.triggerOnlyOnce;
             this.triggeredCount = data.triggeredCount;
             // not running onTrigger here since it is location-based
         }

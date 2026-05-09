@@ -55,16 +55,18 @@ public class InteractableObject : InteractableBase
         //SetBillboardVisibility(false);
 
         onInteract.Invoke();
+        wasInteractedWith = true;
         interactionCount++;
 
         if (isOneTimeUse)
         {
             isInteractable = false;
+            wasInteractedWith = false;  // avoid InteractExit since manually Interacted
         }
     }
     public override void InteractExit()
     {
-        if (!isInteractable)
+        if (!wasInteractedWith)
         {
             return;
         }

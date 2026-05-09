@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
 
 [Serializable]
 public enum InteractableType
@@ -20,6 +19,7 @@ public abstract class InteractableBase : MonoBehaviour, ISaveable
     public string interactResponseText = "You interacted with the object!";
     
     public bool isInteractable = true;
+    protected bool wasInteractedWith = false;
     public bool isOneTimeUse = false;
     public int interactionCount = 0;
     public int interactionExitCount = 0;
@@ -28,6 +28,7 @@ public abstract class InteractableBase : MonoBehaviour, ISaveable
     [SerializeField] bool autoInteractOnColliderTrigger = false;
     [SerializeField] bool autoInteractOnColliderExitTrigger = false;
     [SerializeField] GameObject playerAutoInteractOrNullForAll = null;
+    [SerializeField] string triggerAutoInteractTagOrNullForAll = null;
 
     [SerializeField] GameObject billBoardObject = null;
     [SerializeField] Vector3 billBoardOffset = new Vector3(0f, 2f, 0f);
@@ -120,25 +121,37 @@ public abstract class InteractableBase : MonoBehaviour, ISaveable
 
     void OnTriggerEnter(Collider other)
     {
-        if (autoInteractOnColliderTrigger && (playerAutoInteractOrNullForAll == null || other.gameObject == playerAutoInteractOrNullForAll))
+        if (isInteractable)
         {
-            if (isInteractable)
+            bool tagMatch = string.IsNullOrEmpty(triggerAutoInteractTagOrNullForAll) || other.gameObject.CompareTag(triggerAutoInteractTagOrNullForAll);
+            bool playerGOMatch = playerAutoInteractOrNullForAll == null || other.gameObject == playerAutoInteractOrNullForAll;
+            if (autoInteractOnColliderTrigger && tagMatch && playerGOMatch)
             {
                 Interact();
                 objectTriggeredBy = other.gameObject;
+                if (isOneTimeUse)
+                {
+                    isInteractable = false;                    
+                }
+                wasInteractedWith = true;
             }
         }
     }
     void OnTriggerExit(Collider other)
     {
-        if (autoInteractOnColliderTrigger && objectTriggeredBy == other.gameObject)
+        if (wasInteractedWith)
         {
-            if (autoInteractOnColliderExitTrigger && isInteractable)
+            if (autoInteractOnColliderExitTrigger && objectTriggeredBy == other.gameObject)
             {
                 InteractExit();
                 //inkStoryComponentOrNull?.ExitTriggerArea();
+                objectTriggeredBy = null;
             }
-            objectTriggeredBy = null;
+            // if we can reuse, we reset wasInteractedWith for next OnTriggerExit
+            if (!isOneTimeUse)
+            {
+                wasInteractedWith = true;
+            }
         }
     }
 
@@ -152,6 +165,7 @@ public abstract class InteractableBase : MonoBehaviour, ISaveable
         public bool isInteractable;
         public bool isOneTimeUse;
         public int interactionCount;
+        public int interactionExitCount;
     }
     public object CaptureState()
     {
@@ -162,7 +176,8 @@ public abstract class InteractableBase : MonoBehaviour, ISaveable
             interactResponseText = this.interactResponseText,
             isInteractable = this.isInteractable,
             isOneTimeUse = this.isOneTimeUse,
-            interactionCount = this.interactionCount
+            interactionCount = this.interactionCount,
+            interactionExitCount = this.interactionExitCount
         };
         return data;
     }
@@ -176,7 +191,7 @@ public abstract class InteractableBase : MonoBehaviour, ISaveable
             this.isInteractable = data.isInteractable;
             this.isOneTimeUse = data.isOneTimeUse;            
             this.interactionCount = data.interactionCount;
-
+            this.interactionExitCount = data.interactionExitCount;
 
             Debug.Log("IB->RestoreState: Restored state for interactable of type: " + interactableType + " with interactText: " + interactText + " and isInteractable: " + isInteractable + " and interactionCount: " + interactionCount);
             bDataRestored = true;

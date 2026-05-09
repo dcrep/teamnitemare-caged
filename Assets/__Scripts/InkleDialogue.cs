@@ -18,14 +18,18 @@ using UnityEngine.UI;
 // during interaction, and optionally back on afterwards
 // also option to disable player movement during dialogue, or allow player
 // on=exit collider to end dialogue..
+//TODO: animation? (fade-in/out of characters, move to left/center/right), audio? (dialogue,music,sfx), AudioSource
 
 // special Inkle-related UnityEvents that take strings as parameters
 
 // string tagName
+[Serializable]
 public class StringEvent : UnityEvent<string> { }
+[Serializable]
 public class StringListEvent : UnityEvent<List<string>> { }
 
 // string variableName, string triggerValue
+[Serializable]
 public class TwoStringEvent : UnityEvent<string, string> { }
 
 [Serializable]
