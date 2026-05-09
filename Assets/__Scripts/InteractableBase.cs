@@ -201,6 +201,13 @@ public abstract class InteractableBase : MonoBehaviour, ISaveable
             //     // Interact will increment interactionCount (presumably, base class here)
             //     interactionCount--;
             // }
+
+            // ! This is better served by SaveManager + Quest/QuestManager?
+            // if (TryGetComponent<QuestComponent>(out var questComponent))
+            // {
+            //     Debug.Log("IB->RestoreState: Interactable has QuestComponent with uniqueID: " + questComponent.uniqueID.ID + ", questTaskTag: " + questComponent.questTaskTag + ", isCollectible: " + questComponent.isCollectible);
+            //     if (questComponent.destroyOnComplete)
+            // }
         }
     }
 #endregion ISaveable implementation

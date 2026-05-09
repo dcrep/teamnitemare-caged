@@ -35,15 +35,15 @@ public class TaskGroup
             totalObjectives = taskObjects.Count,
             questTasks = new List<QuestTask>(),
         };
-        foreach (var go in taskObjects)
+        foreach (var questComponent in taskObjects)
         {
             // Race condition workaround:
-            var uid = go.uniqueID ?? go.GetComponent<UniqueID>();
-            if (uid == null) { Debug.LogError($"Missing UniqueID on {go.name}"); continue; }
-            Debug.Log("Q-> uniqueID: " + uid.ID + ", name: " + go.gameObject.name + ", tag: " + go.questTaskTag + ", isCollectible: " + go.isCollectible);
+            var uid = questComponent.uniqueID ?? questComponent.GetComponent<UniqueID>();
+            if (uid == null) { Debug.LogError($"Missing UniqueID on {questComponent.name}"); continue; }
+            Debug.Log("Q-> uniqueID: " + uid.ID + ", name: " + questComponent.gameObject.name + ", tag: " + questComponent.questTaskTag + ", isCollectible: " + questComponent.isCollectible);
             questInfo.questTasks.Add(new QuestTask {
-                taskUniqueId = uid.ID, taskName = go.gameObject.name,
-                questTaskTag = go.questTaskTag, isCollectibleTask = go.isCollectible,
+                taskUniqueId = uid.ID, taskName = questComponent.gameObject.name,
+                questTaskTag = questComponent.questTaskTag, isCollectibleTask = questComponent.isCollectible,
                 isCompleted = actedOnComplete, taskDescription = "",
                 taskValue = 1, taskMaxValue = 1, oneTimeCompletion = true, requiredTasks = null});
         }
@@ -57,10 +57,10 @@ public class TaskGroup
             Debug.LogError("ConvertToQuestTask: Index out of range for task objects. Index: " + index + ", Count: " + taskObjects.Count);
             return null;
         }
-        var go = taskObjects[index];
+        var questComponent = taskObjects[index];
         return new QuestTask {
-            taskUniqueId = go.uniqueID.ID, taskName = go.gameObject.name,
-            questTaskTag = go.questTaskTag, isCollectibleTask = go.isCollectible,
+            taskUniqueId = questComponent.uniqueID.ID, taskName = questComponent.gameObject.name,
+            questTaskTag = questComponent.questTaskTag, isCollectibleTask = questComponent.isCollectible,
             isCompleted = actedOnComplete, taskDescription = "",
             taskValue = 1, taskMaxValue = 1, oneTimeCompletion = true, requiredTasks = null
         };
@@ -159,9 +159,9 @@ public class Quest : MonoBehaviour, ISaveable
         return taskGroup;
     }
 
-    public void AddTaskObject(QuestComponent go)
+    public void AddTaskObject(QuestComponent questComponent)
     {
-        taskGroup.taskObjects.Add(go);
+        taskGroup.taskObjects.Add(questComponent);
         // ! Minimum loses its meaning if I adjust every time I add a task object??
         if (taskGroup.taskMinimumForCompletion <= 0 || taskGroup.taskMinimumForCompletion < taskGroup.taskObjects.Count)
         {
@@ -169,9 +169,9 @@ public class Quest : MonoBehaviour, ISaveable
         }
         else
         {
-            Debug.Log("Added task object w/o increment: " + go.uniqueID.ID + " to group: " + taskGroup.taskGroupName + " in scene: " + sceneName + ". Tasks remaining to complete group: " + TasksRemaining);
+            Debug.Log("Added task object w/o increment: " + questComponent.uniqueID.ID + " to group: " + taskGroup.taskGroupName + " in scene: " + sceneName + ". Tasks remaining to complete group: " + TasksRemaining);
         }
-        QuestManager.Instance.AddTaskObject(this, go, false);
+        QuestManager.Instance.AddTaskObject(this, questComponent, false);
     }
 
     private bool IsItOkayToActOnComplete()
@@ -193,11 +193,11 @@ public class Quest : MonoBehaviour, ISaveable
         return true;
     }
 
-    public int FindTaskGroupIndexForTaskObject(QuestComponent go)
+    public int FindTaskGroupIndexForTaskObject(QuestComponent questComponent)
     {
         for (int i = 0; i < taskGroup.taskObjects.Count; i++)
         {
-            if (taskGroup.taskObjects[i] == go)
+            if (taskGroup.taskObjects[i] == questComponent)
             {
                 return i;
             }
@@ -210,28 +210,33 @@ public class Quest : MonoBehaviour, ISaveable
         return taskGroup.ConvertToQuestInfo(questUniqueId.ID);
     }
 
-    public void CompleteTaskObject(QuestComponent go)
+    public void CompleteTaskObject(QuestComponent questComponent)
     {
-        int groupIndex = FindTaskGroupIndexForTaskObject(go);
+        int groupIndex = FindTaskGroupIndexForTaskObject(questComponent);
         if (groupIndex == -1)
         {
-            Debug.LogWarning("CompleteTaskObject: No TaskGroup found containing task object: " + go.uniqueID.ID);
+            Debug.LogWarning("CompleteTaskObject: No TaskGroup found containing task object: " + questComponent.uniqueID.ID);
             return;
         }
-        CompleteTaskObjectAndActOnComplete(go);
+        CompleteTaskObjectAndActOnComplete(questComponent);
     }
 
     // CompleteTaskObject calls this and checks that the task object exists in group
-    private void CompleteTaskObjectAndActOnComplete(QuestComponent go)
+    private void CompleteTaskObjectAndActOnComplete(QuestComponent questComponent)
     {
-        QuestManager.Instance.CompletedQuestObject(this, go);
+        QuestManager.Instance.CompletedQuestObject(this, questComponent);
 
-        if (taskGroup.taskObjects.Remove(go))
+        if (taskGroup.taskObjects.Remove(questComponent))
         {
             taskGroup.tasksCompleted++;
         }
+        //if (questComponent.isCollectible)
+        if (questComponent.destroyOnComplete)
+        {
+            Destroy(questComponent.gameObject);
+        }
 
-        Debug.Log("Removing Quest Object: " + go.uniqueID.ID + ", tasks left: " + TasksRemaining + " for group: " + taskGroup.taskGroupName + " in scene: " + sceneName);
+        Debug.Log("Removing Quest Object: " + questComponent.uniqueID.ID + ", tasks left: " + TasksRemaining + " for group: " + taskGroup.taskGroupName + " in scene: " + sceneName);
 
         if (IsItOkayToActOnComplete())
         {
@@ -245,6 +250,7 @@ public class Quest : MonoBehaviour, ISaveable
     [ContextMenu("Manual Force OnTaskComplete")]
     public void ManualForceOnTaskComplete()
     {
+        //!! No gameObject destruction here. It is literally just calling Invoke.
         taskGroup.onTasksCompleted.Invoke();
     }
 
@@ -257,9 +263,14 @@ public class Quest : MonoBehaviour, ISaveable
     public void ForceCompleteTaskGroup(bool actOnComplete = true)
     {
         Debug.Log("Force completing all tasks for group: " + taskGroup.taskGroupName + " in scene: " + sceneName);
-        foreach (var go in taskGroup.taskObjects)
+        foreach (var questComponent in taskGroup.taskObjects)
         {
-            QuestManager.Instance.CompletedQuestObject(this, go);
+            QuestManager.Instance.CompletedQuestObject(this, questComponent);
+            //if (questComponent.isCollectible)
+            if (questComponent.destroyOnComplete)
+            {
+                Destroy(questComponent.gameObject);
+            }
         }
         taskGroup.taskObjects.Clear();
         taskGroup.tasksCompleted = taskGroup.taskMinimumForCompletion;
@@ -277,20 +288,20 @@ public class Quest : MonoBehaviour, ISaveable
         taskGroup = new TaskGroup();
     }
 
-    public void CompleteNonTaskObject(QuestComponent go)
+    public void CompleteNonTaskObject(QuestComponent questComponent)
     {
-        Debug.Log("Completing non-task object: " + go.uniqueID.ID + " for scene: " + sceneName);
-        QuestManager.Instance.CompletedNonQuestObject(go);
+        Debug.Log("Completing non-task object: " + questComponent.uniqueID.ID + " for scene: " + sceneName);
+        QuestManager.Instance.CompletedNonQuestObject(questComponent);
     }
 
     // Note this isn't "correct" in terms of checking GameState task completion,
     // however it is quick if this Quest did have the given task as an objective
-    public bool IsGivenTaskComplete(QuestComponent go)
+    public bool IsGivenTaskComplete(QuestComponent questComponent)
     {
         // check if the given task object is still in the task group (i.e. not complete)
         foreach (var taskObject in taskGroup.taskObjects)
         {
-            if (taskObject == go)
+            if (taskObject == questComponent)
             {
                 return false;
             }
@@ -303,11 +314,11 @@ public class Quest : MonoBehaviour, ISaveable
     public bool AreGivenTasksComplete(List<QuestComponent> taskObjects)
     {
         // find components in task group and check if they are all complete (i.e. not in the task group anymore)
-        foreach (var go in taskObjects)
+        foreach (var questComponent in taskObjects)
         {
-            if (IsGivenTaskComplete(go) == false)
+            if (IsGivenTaskComplete(questComponent) == false)
             {
-                Debug.Log("Task object: " + go.uniqueID.ID + " is not yet complete for scene: " + sceneName);
+                Debug.Log("Task object: " + questComponent.uniqueID.ID + " is not yet complete for scene: " + sceneName);
                 return false;
             }
         }
@@ -331,9 +342,9 @@ public class Quest : MonoBehaviour, ISaveable
             taskGroupObjectIds = new List<string>(),
             actedOnComplete = taskGroup.actedOnComplete
         };
-        foreach (var go in taskGroup.taskObjects)
+        foreach (var questComponent in taskGroup.taskObjects)
         {
-            data.taskGroupObjectIds.Add(go.uniqueID.ID);
+            data.taskGroupObjectIds.Add(questComponent.uniqueID.ID);
         }
         // clear up anything referencing scene objects before saving
         data.taskGroup.taskObjectToCompleteFirst = null;

@@ -8,8 +8,26 @@ public class TimerObject : MonoBehaviour, ISaveable
     public float timerDuration = 5f;
     public bool restartAfterExpire = false;
     public int triggerCount = 0;
+    private bool bRestoredState = false;
 
     public UnityEngine.Events.UnityEvent onTimerExpire;
+
+    void Start()
+    {
+        if (bRestoredState)
+        {
+            // if we restored state and triggerCount > 0, we assume the timer had already expired at least once, so we trigger the event immediately
+            if (triggerCount > 0)
+            {
+                onTimerExpire?.Invoke();
+                //! This is iffy as to timing..
+                if (restartAfterExpire)
+                {
+                    //StartTimer();
+                }
+            }
+        }
+    }
 
     public void StartTimer()
     {
@@ -115,15 +133,7 @@ public class TimerObject : MonoBehaviour, ISaveable
             this.restartAfterExpire = data.restartAfterExpire;
             this.triggerCount = data.triggerCount;
 
-            if (triggerCount > 0)
-            {
-                onTimerExpire?.Invoke();
-                //! This is iffy as to timing..
-                if (restartAfterExpire)
-                {
-                    //StartTimer();
-                }
-            }
+            bRestoredState = true;
         }
     }
 #endregion ISaveable implementation

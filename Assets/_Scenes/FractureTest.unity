@@ -2595,7 +2595,7 @@ MonoBehaviour:
   questTaskTag: 
   isCollectible: 0
   onceOnly: 1
-  destroyOnComplete: 0
+  destroyOnComplete: 1
 --- !u!114 &1338003856
 MonoBehaviour:
   m_ObjectHideFlags: 0
