@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using System.Collections.Generic;
 
 public class TextCanvas : MonoBehaviour
 {
@@ -28,6 +29,20 @@ public class TextCanvas : MonoBehaviour
         if (text != null)
         {
             text.text = newText;
+        }
+    }
+    public void SetCombinedText(string newText1, string newText2)
+    {
+        if (text != null)
+        {
+            text.text = newText1 + "; " + newText2;
+        }
+    }
+    public void SetCombinedTextList(List<string> textList)
+    {
+        if (text != null && textList != null)
+        {
+            text.text = string.Join("; ", textList);
         }
     }
     public void SetTextAlignment(TextAlignmentOptions alignment)

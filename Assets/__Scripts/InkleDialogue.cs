@@ -60,17 +60,35 @@ public struct InkleDialogueData
     public string[] options;
 }
 
+public enum InkleSpeakerLocation
+{
+    Left = 1,
+    Center = 2,
+    Right = 3        
+}
+
+[Serializable]
+public struct InkleSpeakerInfo
+{
+    public string speakerName;
+    public InkleSpeakerLocation speakerLocation;
+    public Sprite portrait;
+}
+
 public class InkleDialogue : MonoBehaviour
 {
     [SerializeField] private GameObject inkleDialoguePanelPrefab;
     GameObject dialoguePanel;
-    private InkleUILayout uiLayout;
+    //private InkleUILayout uiLayout;
+    private InkleUI inkleUI;
 
     [SerializeField] List<InkleSpeakerImages> speakerImages = new List<InkleSpeakerImages>();
 
-    [SerializeField] string speakerTagPrefix = "speaker:";
-    [SerializeField] string speakerLocationTagPrefix = "speakerLocation:";
-    [SerializeField] string speakerImageTagPrefix = "speakerImage:";
+    [SerializeField] string speakerTagPrefix = "actor:";
+    [SerializeField] string speakerLocationTagPrefix = "actorLoc:";
+    [SerializeField] string speakerImageTagPrefix = "actorPic:";
+
+    List<InkleSpeakerInfo> currentSpeakers = new List<InkleSpeakerInfo>();
 
     [SerializeField] List<InkleVariableWatch> variableWatches = new List<InkleVariableWatch>();
     [SerializeField] List<InkleTagWatch> tagWatches = new List<InkleTagWatch>();
@@ -90,13 +108,18 @@ public class InkleDialogue : MonoBehaviour
     public bool DialogueIsPlaying { get; private set; } = false;
     public bool DialoguePanelIsActive { get; private set; } = false;
 
+    public int LastSelectedChoiceIndex { get; private set; } = -1;
+    public string LastSelectedChoiceText { get; private set; } = "";
+
     private Story currentStory = null;
     private string storyName = "";
+    public string CurrentStoryName => storyName;
     private string currentText = "";
+    public string CurrentStoryText => currentText;
     private List<Choice> currentChoices = null;
     private List<string> currentTags = new List<string>();
     bool speakerActive = false;
-    int currentSpeakerIndex = 0;
+    //int currentSpeakerIndex = 0;
 
     private InputSystem_Actions inputActions;
     private Coroutine restoreControlsAfterDialogueCoroutine;
@@ -109,7 +132,7 @@ public class InkleDialogue : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning("InkleDialogue: Multiple instances of InkleDialogue detected in scene. There should only be one instance. Destroying duplicate.");
+            Debug.LogWarning("InkD-> Multiple instances of InkleDialogue detected in scene. There should only be one instance. Destroying duplicate.");
             Destroy(this.gameObject);
             return;
         }
@@ -123,7 +146,7 @@ public class InkleDialogue : MonoBehaviour
 
         if (dialoguePanel == null)
         {
-            Debug.LogError("InkleDialogue: One or more UI components not assigned in inspector.");
+            Debug.LogError("InkD-> One or more UI components not assigned in inspector.");
         }
     }
     void Start()
@@ -138,14 +161,16 @@ public class InkleDialogue : MonoBehaviour
         GameObject canvas = GameObject.Find("Canvas");
         if (inkleDialoguePanelPrefab == null)
         {
-            Debug.LogError("InkleDialogue: Inkle dialogue panel prefab not assigned in inspector.");
+            Debug.LogError("InkD-> Inkle dialogue panel prefab not assigned in inspector.");
             //inkleDialoguePanelPrefab = Resources.Load<GameObject>("Prefabs/" + "InklePanel");
             return;
         }
         dialoguePanel = Instantiate(inkleDialoguePanelPrefab, canvas.transform);
         //dialoguePanel.transform.SetParent(canvas.transform, false);
 
-        uiLayout = dialoguePanel.GetComponent<InkleUIPrefab>().layout;
+        inkleUI = dialoguePanel.GetComponent<InkleUI>();
+
+        //uiLayout = dialoguePanel.GetComponent<InkleUI>().layout;
         
     //! prefab structure should be ignored and maybe have a script
     // that acts as an interface for communication from this script?
@@ -208,8 +233,8 @@ public class InkleDialogue : MonoBehaviour
 
     void OnDisable()
     {
-        HideDialogueInterface();
-        ResetState();
+        inkleUI.HideDialogueInterface();
+        InternalResetState();
         inputActions.Player.Attack.performed -= OnClickAnywhereToContinue;
         inputActions.Player.Interact.performed -= OnInteractPerformed;
         inputActions.Disable();
@@ -227,14 +252,16 @@ public class InkleDialogue : MonoBehaviour
     }
     public void StartDialogue(string inkStoryJSON, string storyName)
     {
-        Debug.Log("InkleDialogue: Starting dialogue with story: " + storyName);
+        Debug.Log("InkD-> Starting dialogue with story: " + storyName);
         if (DialogueIsPlaying)
         {
-            Debug.LogWarning("InkleDialogue: Attempted to start dialogue while another dialogue is already playing. Ending current dialogue and starting new one.");
+            Debug.LogWarning("InkD-> Attempted to start dialogue while another dialogue is already playing. Ending current dialogue and starting new one.");
             EndDialogue();
         }
         else
-            ResetState();
+            InternalResetState();
+
+        dialoguePanel.SetActive(true);
 
         this.storyName = storyName;
 
@@ -256,7 +283,7 @@ public class InkleDialogue : MonoBehaviour
 
         ConfigureEventSystemForDialogue();
         SetupVariableListeners();
-        ShowDialogueInterface();
+        inkleUI.ShowDialogueInterface();
 
         GameManager.Instance.ModalDialogueSetIsOpen();
 
@@ -283,7 +310,7 @@ public class InkleDialogue : MonoBehaviour
 
         if (inputActions.Player.Attack.IsPressed() || inputActions.Player.Interact.IsPressed())
         {
-            //Debug.Log("InkleDialogue: Consuming opening input to prevent unintended advance or choice selection.");
+            //Debug.Log("InkD-> Consuming opening input to prevent unintended advance or choice selection.");
             consumeOpeningInput = false;
             return true;
         }
@@ -297,7 +324,7 @@ public class InkleDialogue : MonoBehaviour
         EventSystem es = EventSystem.current;
         if (es == null)
         {
-            Debug.LogError("InkleDialogue: No EventSystem found in scene. Please add an EventSystem to the scene for dialogue choices to work.");
+            Debug.LogError("InkD-> No EventSystem found in scene. Please add an EventSystem to the scene for dialogue choices to work.");
             return;
         }
 
@@ -309,7 +336,7 @@ public class InkleDialogue : MonoBehaviour
         InputSystemUIInputModule uiModule = es.GetComponent<InputSystemUIInputModule>();
         if (uiModule == null)
         {
-            Debug.LogError("InkleDialogue: EventSystem is missing InputSystemUIInputModule. Hover and button clicks will not work.");
+            Debug.LogError("InkD-> EventSystem is missing InputSystemUIInputModule. Hover and button clicks will not work.");
             return;
         }
 
@@ -339,9 +366,9 @@ public class InkleDialogue : MonoBehaviour
         DisableVariableListeners();
         currentStory = null;        
         onDialogueEnded.Invoke();
-        HideDialogueInterface();
+        inkleUI.HideDialogueInterface();
         DialogueIsPlaying = false;
-        ResetState();
+        InternalResetState();
         GameManager.Instance.ModalDialogueSetIsClosed();
         if (playerMovementDisabledDuringDialogue) 
         {
@@ -380,7 +407,8 @@ public class InkleDialogue : MonoBehaviour
             {
                 currentText = currentStory.Continue();
             }
-            uiLayout.dialogueText.text = currentText;
+            inkleUI.UpdateDialogueText(currentText);
+            //uiLayout.dialogueText.text = currentText;
             InternalCheckTagsAndHandleSpecialTags();
             CheckTagsAndInvokeTagEvents();
             
@@ -388,17 +416,12 @@ public class InkleDialogue : MonoBehaviour
             // ShowChoices():
             if (currentChoices != null && currentChoices.Count > 0)
             {
-                ShowChoiceUI(currentChoices.Count);
-                for (int i = 0; i < currentChoices.Count; i++)
-                {
-                    uiLayout.choicesText[i].text = currentChoices[i].text;
-                }
+                inkleUI.ShowChoiceUI(currentChoices, 0);
                 onChoicesPresented.Invoke();
-                // Select 1st choice by default (done in ShowChoiceUI).
             }
             else
             {
-                HideChoiceUI();
+                inkleUI.HideChoiceUI();
             }
         }
         else
@@ -417,7 +440,7 @@ public class InkleDialogue : MonoBehaviour
     {
         if (Instance == null)
         {
-            Debug.LogError("InkleDialogue: No instance of InkleDialogue found in scene. Cannot make choice.");
+            Debug.LogError("InkD-> No instance of InkleDialogue found in scene. Cannot make choice.");
             return;
         }
         Instance.MakeChoice(choiceIndex);
@@ -425,12 +448,14 @@ public class InkleDialogue : MonoBehaviour
 
     public void MakeChoice(int choiceIndex)
     {
-        Debug.Log("InkleDialogue: Making choice with index: " + choiceIndex);
+        Debug.Log("InkD-> Making choice with index: " + choiceIndex);
         if (currentChoices == null || choiceIndex < 0 || choiceIndex >= currentChoices.Count)
         {
-            Debug.LogError("InkleDialogue: Invalid choice index: " + choiceIndex);
+            Debug.LogError("InkD-> Invalid choice index: " + choiceIndex);
             return;
         }
+        LastSelectedChoiceIndex = choiceIndex;
+        LastSelectedChoiceText = currentChoices[choiceIndex].text;
         onChoiceSelection.Invoke();
         currentStory.ChooseChoiceIndex(choiceIndex);
         ContinueStory();
@@ -451,18 +476,18 @@ public class InkleDialogue : MonoBehaviour
     {
         if (EventSystem.current == null)
         {
-            Debug.LogError("InkleDialogue: No EventSystem found in scene. Cannot submit selected choice.");
+            Debug.LogError("InkD-> No EventSystem found in scene. Cannot submit selected choice.");
             return;
         }
         GameObject selectedObject = EventSystem.current.currentSelectedGameObject;
         if (selectedObject == null)
         {
-            Debug.Log("InkleDialogue: No selected object. Cannot submit selected choice.");
+            Debug.Log("InkD-> No selected object. Cannot submit selected choice.");
             return;
         }
-        for (int i = 0; i < uiLayout.choices.Count; i++)
+        for (int i = 0; i < inkleUI.layout.choices.Count; i++)
         {
-            if (selectedObject == uiLayout.choices[i] || selectedObject.transform.IsChildOf(uiLayout.choices[i].transform))
+            if (selectedObject == inkleUI.layout.choices[i] || selectedObject.transform.IsChildOf(inkleUI.layout.choices[i].transform))
             {
                 MakeChoice(i);
                 return;
@@ -470,43 +495,60 @@ public class InkleDialogue : MonoBehaviour
         }
     }
 
-
-    enum SpeakerLocation
-    {
-        Left = 1,
-        Center = 2,
-        Right = 3        
-    }
-
     void InternalCheckTagsAndHandleSpecialTags()
     {
         // SpeakerLocation currentSpeakerLocation = SpeakerLocation.Right; // default location
         bool speakerFound = false;
+        bool speakerLocationFound = false;
         bool speakerPortraitFound = false;
+        int changeOfSpeakers = 0;
+        // add current speakers
         string speakerName = "";
-        Sprite newPortrait = null;
 
         // handle special tags that have built-in functionality in this script, such as showing the speaker panel or setting the speaker location
         foreach (var tag in currentStory.currentTags)
         {
-            Debug.Log("InkleDialogue: Checking tag: " + tag);
+            Debug.Log("InkD-> Checking tag: " + tag);
 
             if (tag.Trim().StartsWith(speakerTagPrefix))
             {
-                speakerName = tag.Substring(speakerTagPrefix.Length);
-                if (string.IsNullOrEmpty(speakerName) || speakerName == "OFF")
+                speakerName = tag.Trim().Substring(speakerTagPrefix.Length);
+                // check for "+" which indicates more than one speaker
+                if (speakerName.Contains("+"))
                 {
-                    // if speaker name is empty or "OFF", hide speaker panel(s)
-                    for (int i = 0; i < uiLayout.speakerPanels.Count; i++)
+                    // clearing previous speakers 1st
+                    currentSpeakers.Clear();
+                    Debug.Log("InkD-> Multiple speakers specified in tag: " + tag);
+                    // get speakers, strip whitespace, and add to active speakers list
+                    String[] speakerNames = speakerName.Split('+');
+                    foreach (var name in speakerNames)
                     {
-                        uiLayout.speakerPanels[i].SetActive(false);
+                        string trimmedName = name.Trim();
+                        if (!string.IsNullOrEmpty(trimmedName))
+                        {
+                            currentSpeakers.Add(new InkleSpeakerInfo { speakerName = trimmedName,
+                                speakerLocation = InkleSpeakerLocation.Right, portrait = null });
+                            changeOfSpeakers++;
+                        }
                     }
+                    speakerActive = true;
+                    speakerFound = true;
+                }
+                else if (string.IsNullOrEmpty(speakerName) || speakerName == "OFF")
+                {
+                    changeOfSpeakers = currentSpeakers.Count == 0 ? 0 : currentSpeakers.Count; // 0 if none or all off
+                    currentSpeakers.Clear();
+                    // if speaker name is empty or "OFF", hide speaker panel(s)
+                    inkleUI.HideAllSpeakerPanels();
                     speakerActive = false;
-                    currentSpeakerIndex = 0;
+                    //currentSpeakerIndex = 0;
                     continue;
                 }
                 else
                 {
+                    changeOfSpeakers = currentSpeakers.Count == 0 ? 1 : currentSpeakers.Count + 1;
+                    currentSpeakers.Clear();
+                    currentSpeakers.Add(new InkleSpeakerInfo { speakerName = speakerName });
                     //speaker1Panel.SetActive(true);
                     speakerActive = true;
                     //displayNameText.text = speakerName;
@@ -515,73 +557,127 @@ public class InkleDialogue : MonoBehaviour
             }
             else if (tag.Trim().StartsWith(speakerLocationTagPrefix))
             {
-                string location = tag.Substring(speakerLocationTagPrefix.Length);
-                // set speaker panel location based on location string, e.g. "left", "right", "center"
-                switch (location)
+                string location = tag.Trim().Substring(speakerLocationTagPrefix.Length);
+                // check for "+" which indicates more than one speaker
+                if (location.Contains("+"))
                 {
-                    case "left":
-                        // currentSpeakerLocation = SpeakerLocation.Left;
-                        currentSpeakerIndex = 1;
-                        break;
-                    case "center":
-                        // currentSpeakerLocation = SpeakerLocation.Center;
-                        currentSpeakerIndex = 2;
-                        break;
-                    case "right":
-                        // currentSpeakerLocation = SpeakerLocation.Right;
-                        currentSpeakerIndex = 3;
-                        break;
-                    default:
-                        Debug.LogWarning("InkleDialogue: Unrecognized speaker location tag: " + tag + " valid options: left, center, right, OFF");
-                        break;
+                    Debug.Log("InkD-> Multiple speaker locations specified in tag: " + tag);
+                    // get speakers, strip whitespace, and add to active speakers list
+                    String[] speakerLocations = location.Split('+');
+                    if (speakerLocations.Length != currentSpeakers.Count)
+                    {
+                        Debug.LogWarning("InkD-> Number of speaker locations specified in tag: " + tag + " does not match number of active speakers. Must come AFTER speaker tags. Ignoring speaker location tag.");
+                        continue;
+                    }
+            
+                    for (int index = 0; index < speakerLocations.Length; index++)
+                    {
+                        // structs require pulling, modifying, and re-adding to list
+                        var speaker = currentSpeakers[index];
+                        speaker.speakerLocation = GetSpeakerLocationFromTag(speakerLocations[index].Trim());
+                        currentSpeakers[index] = speaker;
+                    }
                 }
+                else if (!string.IsNullOrEmpty(location))
+                {
+                    if (currentSpeakers.Count == 0)
+                    {
+                        Debug.LogWarning("InkD-> Speaker location tag found but no active speakers. Tag: " + tag + " Ignoring speaker location tag.");
+                        continue;
+                    }
+                    // structs require pulling, modifying, and re-adding to list
+                    var speaker = currentSpeakers[0];
+                    speaker.speakerLocation = GetSpeakerLocationFromTag(location); // already trimmed above
+                    currentSpeakers[0] = speaker;
+                    if (currentSpeakers.Count > 1)
+                    {
+                        Debug.LogWarning("InkD-> Speaker location tag found but multiple active speakers. Tag: " + tag + " Setting only 1st speaker location. Must specify multiple locations with '+' if multiple speakers are active.");
+                    }
+                }
+                speakerLocationFound = true;
             }
             else if (tag.Trim().StartsWith(speakerImageTagPrefix))
             {
+                string imageName = tag.Trim().Substring(speakerImageTagPrefix.Length);
+                // check for "+" which indicates more than one speaker
+                if (imageName.Contains("+"))
+                {   
+                    Debug.Log("InkD-> Multiple speaker images specified in tag: " + tag);
+                    // get images, strip whitespace, and add to active speakers list
+                    String[] speakerImages = imageName.Split('+');
+                    if (speakerImages.Length != currentSpeakers.Count)
+                    {
+                        Debug.LogWarning("InkD-> Number of speaker images specified in tag: " + tag + " does not match number of active speakers. Must come AFTER speaker tags. Ignoring speaker image tag.");
+                        continue;
+                    }
+            
+                    for (int index = 0; index < speakerImages.Length; index++)
+                    {
+                        // structs require pulling, modifying, and re-adding to list
+                        var speaker = currentSpeakers[index];
+                        speaker.portrait = GetPortrait(speaker.speakerName, speakerImages[index].Trim());
+                        currentSpeakers[index] = speaker;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(imageName))
+                {
+                    if (currentSpeakers.Count == 0)
+                    {
+                        Debug.LogWarning("InkD-> Speaker image tag found but no active speakers. Tag: " + tag + " Ignoring speaker image tag.");
+                        continue;
+                    }
+                    else if (currentSpeakers.Count > 0)
+                    {
+                        var speaker = currentSpeakers[0];
+                        speaker.portrait = GetPortrait(speaker.speakerName, imageName);
+                        currentSpeakers[0] = speaker;
+                        if (currentSpeakers.Count > 1)
+                        {
+                            Debug.LogWarning("InkD-> Speaker image tag found but multiple active speakers. Tag: " + tag + " Setting only 1st speaker image tag. Must specify multiple images with '+' if multiple speakers are active.");
+                        }                        
+                    }
+                }
                 speakerPortraitFound = true;
-                newPortrait = GetPortrait(speakerName, tag.Substring(speakerImageTagPrefix.Length));
             }
         }
-        if (!speakerFound)
+        // if (!speakerFound)
+        // {
+        //     if (!speakerActive)
+        //     {
+        //         inkleUI.HideAllSpeakerPanels();
+        //         //currentSpeakerIndex = 0;
+        //     }
+        // }
+        // else 
+        if (changeOfSpeakers > 0 && currentSpeakers.Count > 0)
         {
-            if (!speakerActive)
-            {
-                for (int i = 0; i < uiLayout.speakerPanels.Count; i++)
-                {
-                    uiLayout.speakerPanels[i].SetActive(false);
-                }
-                currentSpeakerIndex = 0;
-            }
+            inkleUI.ShowSpeakers(currentSpeakers);
         }
-        else
+        else if ( (speakerFound || speakerLocationFound || speakerPortraitFound) && currentSpeakers.Count > 0)
         {
-            if (currentSpeakerIndex == 0)
-            {
-                // if no location tag was found, default to right
-                currentSpeakerIndex = (int)SpeakerLocation.Right;
-            }
-            // set speakers other than currentSpeakerIndex to inactive
-            for (int i = 0; i < uiLayout.speakerPanels.Count; i++)
-            {
-                if (i != currentSpeakerIndex - 1)
-                {
-                    uiLayout.speakerPanels[i].SetActive(false);
-                }
-            }
-            uiLayout.speakerPanels[currentSpeakerIndex - 1].SetActive(true);
-            uiLayout.displayNameText[currentSpeakerIndex - 1].text = speakerName;
-            if (newPortrait == null)
-            {
-                newPortrait = GetPortrait(speakerName);
-            }
-        }
-        if (speakerPortraitFound && speakerActive)
-        {
-            uiLayout.portraitImages[currentSpeakerIndex - 1].sprite = newPortrait;
+            inkleUI.ShowSpeakers(currentSpeakers);
         }
     }
+
+    InkleSpeakerLocation GetSpeakerLocationFromTag(string location)
+    {
+        switch (location.ToLower())
+        {
+            case "left":
+                return InkleSpeakerLocation.Left;
+            case "center":
+                return InkleSpeakerLocation.Center;
+            case "right":
+                return InkleSpeakerLocation.Right;
+            default:
+                Debug.LogWarning("InkD-> Invalid speaker location in tag: " + location + ". Defaulting to right.");
+                return InkleSpeakerLocation.Right;
+        }
+    }
+
     Sprite GetPortrait(string speakerName, string imageName = "")
     {
+        Debug.Log("InkD-> GetPortrait called with speakerName: " + speakerName + " and imageName: " + imageName);
         if (!string.IsNullOrEmpty(speakerName))
         {
             // ignoring case and whitespace
@@ -591,15 +687,21 @@ public class InkleDialogue : MonoBehaviour
                 // ignore case and whitespace when comparing speaker names to find portrait
                 if (speakerImage.speakerName.Trim().ToLower() == speakerName)
                 {
-                    Debug.Log("InkleDialogue.GetPortrait: Found portrait sprite in speakerImages list for speaker: " + speakerName);
-                    //uiLayout.portraitImages[currentSpeakerIndex - 1].sprite = speakerImage.portrait;
-                    return speakerImage.portrait;
+                    Debug.Log("InkD->GetPortrait: Found portrait sprite in speakerImages list for speaker: " + speakerName);
+                    if (string.IsNullOrEmpty(imageName) || speakerImage.portrait.name.ToLower() == imageName.ToLower())
+                    {
+                        return speakerImage.portrait;
+                    }
+                    else
+                    {
+                        Debug.LogWarning("InkD->GetPortrait: Portrait name: " + speakerImage.portrait.name + " does not match imageName from tag: " + imageName + ".");
+                    }
                 }
             }
             //TODO: try linked InkleStoryComponent
         }
         // else:
-        //  speakerName is empty OR no matching speakername's image found
+        //  speakerName is empty OR no matching speakername's image+imagename found
 
         // Last: try resources
         Sprite newPortrait = Resources.Load<Sprite>("InklePortraits/" + imageName);
@@ -607,14 +709,15 @@ public class InkleDialogue : MonoBehaviour
         {
             newPortrait = Resources.Load<Sprite>("InklePortraits/" + "npcDefault");
         }
-        Debug.Log("InkleDialogue.GetPortrait: Loaded portrait sprite: " + (newPortrait != null ? newPortrait.name : "null") + " for tag: " + tag);
+        Debug.Log("InkD->GetPortrait: Loaded portrait sprite: " + (newPortrait != null ? newPortrait.name : "null") + " for image: " + imageName);
         return newPortrait;
     }
 
-    void ResetState()
+    void InternalResetState()
     {
         DialogueIsPlaying = false;
         DialoguePanelIsActive = false;
+        currentSpeakers = new List<InkleSpeakerInfo>();
         currentStory = null;
         currentChoices = null;
         currentText = "";
@@ -628,7 +731,7 @@ public class InkleDialogue : MonoBehaviour
     {
         if (currentStory == null)
         {
-            Debug.LogWarning("InkleDialogue: Attempted to save story state, but no current story exists.");
+            Debug.LogWarning("InkD-> Attempted to save story state, but no current story exists.");
             return "";
         }
         return currentStory.state.ToJson();
@@ -638,7 +741,7 @@ public class InkleDialogue : MonoBehaviour
     {
         if (currentStory == null)
         {
-            Debug.LogWarning("InkleDialogue: Attempted to load story state, but no current story exists.");
+            Debug.LogWarning("InkD-> Attempted to load story state, but no current story exists.");
             return;
         }
         currentStory.state.LoadJson(jsonState);
@@ -647,7 +750,7 @@ public class InkleDialogue : MonoBehaviour
     {
         if (currentStory == null)
         {
-            Debug.LogWarning("InkleDialogue: Attempted to reset story state, but no current story exists.");
+            Debug.LogWarning("InkD-> Attempted to reset story state, but no current story exists.");
             return;
         }
         currentStory.ResetState();
@@ -712,110 +815,6 @@ public class InkleDialogue : MonoBehaviour
     }
 #endregion Input Callbacks
 
-#region UI Methods
-    public void ShowDialogueInterface()
-    {
-        if (DialoguePanelIsActive)
-        {
-            return;
-        }
-        DialoguePanelIsActive = true;
-        // enable interface
-        dialoguePanel.SetActive(true);
-        for (int i = 0; i < uiLayout.speakerPanels.Count; i++)
-        {
-            uiLayout.speakerPanels[i].SetActive(false);
-        }
-        HideChoiceUI();
-    }
-    void ShowChoiceUI(int numChoices, int defaultChoiceIndex = 0)
-    {
-        //onChoicesPresented.Invoke();
-        for (int i = 0; i < uiLayout.choices.Count; i++)
-        {
-            if (i < numChoices)
-            {
-                uiLayout.choices[i].SetActive(true);
-            }
-            else
-            {
-                uiLayout.choices[i].SetActive(false);
-            }
-        }
-        // hide continue icon when choices are present
-        if (uiLayout.continueIcon != null)
-        {
-            uiLayout.continueIcon.enabled = false;
-        }
-        // select first choice by default
-        if (numChoices > 0)
-        {
-            Debug.Log("Highlighting first choice by default: " + uiLayout.choices[0].name);
-            StartCoroutine(SelectFirstChoice());
-            // uiLayout.choices[0].GetComponent<UnityEngine.UI.Button>().Select();
-            // The following might not work so a coroutine might be needed (see SelectFirstChoice coroutine)
-            // EventSystem.current.SetSelectedGameObject(null);
-            // EventSystem.current.SetSelectedGameObject(uiLayout.choices[0].gameObject);
-        }
-    }
-
-    private IEnumerator SelectFirstChoice()
-    {
-        //Event System requires we clear it first, then wait
-        //for at least one frame before we set the current selected object
-        EventSystem.current.SetSelectedGameObject(null);
-        yield return new WaitForEndOfFrame();
-        EventSystem.current.SetSelectedGameObject(uiLayout.choices[0].gameObject);
-    }
-
-    void HideChoiceUI()
-    {
-        if (uiLayout.choices == null)
-        {
-            return;
-        }
-
-        foreach (var choice in uiLayout.choices)
-        {
-            if (choice != null)
-            {
-                choice.SetActive(false);
-            }
-        }
-        // show continue icon when choices are hidden (and supposedly more dialogue to continue)
-        if (uiLayout.continueIcon != null)
-        {
-            uiLayout.continueIcon.enabled = true;
-        }
-    }
-    public void HideDialogueInterface()
-    {
-        if (!DialogueIsPlaying || !DialoguePanelIsActive)
-        {
-            return;
-        }
-
-        if (dialoguePanel != null)
-        {
-            dialoguePanel.SetActive(false);
-        }
-
-        if (uiLayout.speakerPanels != null)
-        {
-            for (int i = 0; i < uiLayout.speakerPanels.Count; i++)
-            {
-                if (uiLayout.speakerPanels[i] != null)
-                {
-                    uiLayout.speakerPanels[i].SetActive(false);
-                }
-            }
-        }
-
-        HideChoiceUI();
-        DialoguePanelIsActive = false;
-        //DialogueManager.GetInstance().HideDialogueInterface();
-    }
-#endregion UI Methods
 
 #region Listeners for Ink story state changes
     void SetupVariableListeners()
@@ -997,19 +996,23 @@ public class InkleDialogue : MonoBehaviour
 #endregion Listeners: Dialogue events
 
 #region Queries: Dialogue state
-    List<string> GetCurrentTags()
+    public string GetStoryName()
     {
-        return currentTags;
+        return storyName;
     }
-    string GetCurrentText()
+    public string GetCurrentText()
     {
         return currentText;
     }
-    List<Choice> GetCurrentChoices()
+    public List<string> GetCurrentTags()
+    {
+        return currentTags;
+    }
+    public List<Choice> GetCurrentChoices()
     {
         return currentChoices;
     }
-    int GetCurrentChoicesCount()
+    public int GetCurrentChoicesCount()
     {
         if (currentChoices == null)
         {
@@ -1017,7 +1020,7 @@ public class InkleDialogue : MonoBehaviour
         }
         return currentChoices.Count;
     }
-    string[] GetCurrentChoicesAsStrings()
+    public string[] GetCurrentChoicesAsStrings()
     {
         if (currentChoices == null)
         {
@@ -1030,7 +1033,7 @@ public class InkleDialogue : MonoBehaviour
         }
         return choiceStrings;
     }
-    object GetVariableValue(string variableName)
+    public object GetVariableValue(string variableName)
     {
         if (currentStory == null)
         {
@@ -1041,7 +1044,7 @@ public class InkleDialogue : MonoBehaviour
 #endregion Queries: Dialogue state
 
 #region Set variable value
-    void SetVariableValue(string variableName, object value)
+    public void SetVariableValue(string variableName, object value)
     {
         if (currentStory == null)
         {
