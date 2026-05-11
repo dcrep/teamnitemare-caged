@@ -43,6 +43,8 @@ public class PlayerControllerDRM : MonoBehaviour
     private int landSoundIndex;
     private bool runningSoundIsPlaying;
     private bool runningSoundWaitingForAirborneState;
+    private bool sprintHeld;
+    private bool hasMoveInput;
 
     void Awake()
     {
@@ -134,6 +136,12 @@ public class PlayerControllerDRM : MonoBehaviour
             Vector2 moveInput = moveAction.ReadValue<Vector2>();
             HandleMovement(moveInput);
         }
+        else
+        {
+            // if move controls are disabled, make sure to stop movement and running sound immediately
+            isRunning = false;
+            StopRunningSound();
+        }
     }
 
     void HandleLook(Vector2 lookVector, bool isMouse)
@@ -157,6 +165,10 @@ public class PlayerControllerDRM : MonoBehaviour
     void HandleMovement(Vector2 moveInput)
     {
         bool wasGroundedThisFrame = characterController.isGrounded;
+        hasMoveInput = moveInput.sqrMagnitude > 0.0001f;
+
+        // Running is only active while sprint is held, grounded, and the player is actively moving.
+        isRunning = sprintHeld && wasGroundedThisFrame && hasMoveInput;
 
         Vector3 move = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized;
         float activeMoveSpeed = isRunning ? runSpeed : moveSpeed;
@@ -206,6 +218,7 @@ public class PlayerControllerDRM : MonoBehaviour
         {
             verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
             coyoteTimer = 0f;
+            isRunning = false;
             PlayRandomClip(jumpSounds, ref jumpSoundIndex);
             StopRunningSound();
             runningSoundWaitingForAirborneState = true;
@@ -237,12 +250,7 @@ public class PlayerControllerDRM : MonoBehaviour
             return;
         }
 
-        isRunning = true;
-
-        if (isRunning && characterController != null && characterController.isGrounded && !runningSoundWaitingForAirborneState)
-        {
-            StartRunningSound();
-        }
+        sprintHeld = true;
     }
 
     void SprintActionCanceled(InputAction.CallbackContext context)
@@ -252,6 +260,7 @@ public class PlayerControllerDRM : MonoBehaviour
             return;
         }
 
+        sprintHeld = false;
         isRunning = false;
         StopRunningSound();
         runningSoundWaitingForAirborneState = false;
@@ -277,7 +286,7 @@ public class PlayerControllerDRM : MonoBehaviour
             return;
         }
 
-        bool shouldBePlaying = isRunning && characterController != null && characterController.isGrounded;
+        bool shouldBePlaying = isRunning && hasMoveInput && characterController != null && characterController.isGrounded;
 
         if (!shouldBePlaying)
         {
