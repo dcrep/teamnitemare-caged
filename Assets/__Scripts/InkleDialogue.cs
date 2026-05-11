@@ -11,6 +11,11 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
 //using System.Diagnostics;
 
+// Inkle: https://www.inklestudios.com/ink/
+// @ Unity Store (version lag): https://assetstore.unity.com/packages/tools/integration/ink-integration-for-unity-60055
+// Inkle Programming Docs: https://github.com/inkle/ink/blob/master/Documentation/RunningYourInk.md
+// Inkle Writing Docs: https://github.com/inkle/ink/blob/master/Documentation/WritingWithInk.md
+
 //TODO: Separate out InkleStoryComponent objects & variable/tag watches
 // Can keep general events for variable/tag watchers but these will
 // need to know story state..
