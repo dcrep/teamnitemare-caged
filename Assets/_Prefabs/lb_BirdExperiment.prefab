@@ -1,0 +1,160 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7184839117912391450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9167215589979581108}
+  - component: {fileID: 1888257706629892946}
+  m_Layer: 0
+  m_Name: lb_BirdExperiment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9167215589979581108
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7184839117912391450}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.60385, y: 16.03, z: -52.14902}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1888257706629892946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7184839117912391450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 665b24a9e6d61974aafebff4179203de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnOnStart: 1
+  spawnAtSpecificLocation: 0
+  spawnPoint: {fileID: 0}
+  spawnPosition: {x: 0, y: 0, z: 0}
+  spawnEulerRotation: {x: 0, y: 0, z: 0}
+  highQuality: 1
+  birdType: 6
+  playSequenceOnStart: 1
+  loopSequence: 1
+  disableDefaultBirdBehaviour: 1
+  stepSkipChance: 0.25
+  holdTimeRandomOffset: {x: 2, y: 5}
+  animationSequence:
+  - parameterType: 1
+    parameterName: peck
+    boolValue: 1
+    intValue: 0
+    floatValue: 0
+    holdTimeSeconds: 4
+  - parameterType: 1
+    parameterName: ruffle
+    boolValue: 1
+    intValue: 0
+    floatValue: 0
+    holdTimeSeconds: 4
+  - parameterType: 1
+    parameterName: sing
+    boolValue: 1
+    intValue: 2
+    floatValue: 0
+    holdTimeSeconds: 4
+  - parameterType: 2
+    parameterName: hop
+    boolValue: 0
+    intValue: 1
+    floatValue: 0
+    holdTimeSeconds: 4
+  - parameterType: 2
+    parameterName: hop
+    boolValue: 0
+    intValue: -2
+    floatValue: 0
+    holdTimeSeconds: 4
+  - parameterType: 1
+    parameterName: sing
+    boolValue: 1
+    intValue: 2
+    floatValue: 0
+    holdTimeSeconds: 4
+  - parameterType: 2
+    parameterName: hop
+    boolValue: 0
+    intValue: -1
+    floatValue: 0
+    holdTimeSeconds: 4
+  - parameterType: 2
+    parameterName: hop
+    boolValue: 0
+    intValue: 2
+    floatValue: 0
+    holdTimeSeconds: 4
+  - parameterType: 1
+    parameterName: sing
+    boolValue: 1
+    intValue: 2
+    floatValue: 0
+    holdTimeSeconds: 4
+  canFlee: 1
+  resumeSequenceAfterFlee: 1
+  resumeSequenceAfterFleeReturn: 1
+  useFleeHotkey: 1
+  fleeKey: 102
+  fleeDistanceMin: 50
+  fleeDistanceMax: 80
+  fleeHeight: 6
+  fleeDuration: 2
+  fleeReturnPause: 0.4
+  preFlightDelay: 0.2
+  waitForFlyAnimationState: 1
+  maxFlyStateWait: 0.5
+  resumeSequenceAfterFlyToLocation: 1
+  flyToLocationDuration: 1
+  enableFeatherEmitter: 1
+  spawnFeatherEmitterOnFlee: 1
+  featherEmitterResourceName: featherEmitter
+  featherEmitterPrefab: {fileID: 100000, guid: caf9ed1b35da9be4ca771c1c07c070cf, type: 3}
+  featherEmitterLifetime: 4.5
+  featherEmitterUseBirdPosition: 1
+  featherEmitterPositionOffset: {x: 0, y: 0, z: 0}
+  featherEmitterRotationOffset: {x: 0, y: 0, z: 0}
+  playAudio: 1
+  playSongAudioOnSingTrigger: 1
+  playFlyAwayAudioOnTakeoff: 1
+  singTriggerParameterName: sing
+  song1: {fileID: 8300000, guid: e2622b95524aab94b9a0448a1a4c6fc8, type: 3}
+  song2: {fileID: 8300000, guid: aa29893140715234fa4c6f0f17bc3d88, type: 3}
+  flyAway1: {fileID: 8300000, guid: 9dabaef0cd2ecb241956e3db52d3bc8d, type: 3}
+  flyAway2: {fileID: 8300000, guid: d6135bc91cdcc2e4b97e48f83fe629f3, type: 3}
+  playSongAtBirdPosition: 1
+  songPositionOffset: {x: 0, y: 0, z: 0}
+  playFlyAwayAtBirdPosition: 1
+  flyAwayPositionOffset: {x: 0, y: 0, z: 0}
+  positionalAudioMinDistance: 1
+  positionalAudioMaxDistance: 200
+  songVolume: 1
+  flyAwayVolume: 1
+  songVolumeBoost: 0.73
+  flyAwayVolumeBoost: 10
+  useGlobalAudioThrottling: 1
+  songPlayChance: 1
+  flyAwayPlayChance: 1
+  minTimeBetweenAnyBirdAudio: 0.08
+  minTimeBetweenSongAudio: 0.1
+  minTimeBetweenFlyAwayAudio: 0.025

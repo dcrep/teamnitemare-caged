@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 6f42ea22f39d60c4fa4b5ed709a37bc4
+timeCreated: 1507940719
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Prefabs/Custom/Hallway/OrchardPot_a_01.prefab
+  uploadId: 290123

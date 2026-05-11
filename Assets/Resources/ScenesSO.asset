@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c90b92e12c948142be19e1164902f01, type: 3}
+  m_Name: ScenesSO
+  m_EditorClassIdentifier: 
+  mainMenuScene: MainMenu
+  mainMenuSceneEnum: 1
+  gameScenes:
+  - Dorm
+  - Nightmare
+  - PitchBlackX
+  - FractureWIP
+  - Dialogue System 2
+  - birdCageRoom
+  - Dream
+  - DORM3
+  - Flying
+  hubScenes: []
+  gameSceneEnum: 2
+  gameOverScene: 
+  gameOverSceneEnum: 3
+  DCExperimentsScene: FractureTest
+  DCExperimentsSceneEnum: 2
+  UITestScene: DuncanDialogueTest
+  UITestSceneEnum: 2
+  UILayoutScene: 
+  UILayoutSceneEnum: 2

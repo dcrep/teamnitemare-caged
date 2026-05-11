@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 38e56bf2eab142445b49494feef54492
+timeCreated: 1455556521
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 351846
+  packageName: Rain Particles
+  packageVersion: 1.0.0
+  assetPath: Assets/Rain Particles/Materials/Rain Ground Hit.mat
+  uploadId: 849958

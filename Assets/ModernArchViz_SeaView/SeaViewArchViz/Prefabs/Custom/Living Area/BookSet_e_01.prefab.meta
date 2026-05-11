@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e506da095bfe08649bff5e8e9ec7c71e
+timeCreated: 1507942715
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Prefabs/Custom/Living Area/BookSet_e_01.prefab
+  uploadId: 290123

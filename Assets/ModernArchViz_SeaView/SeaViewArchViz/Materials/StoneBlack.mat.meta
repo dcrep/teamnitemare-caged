@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0964e4abf67fbcf479e93f5bbf84d635
+timeCreated: 1507937242
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Materials/StoneBlack.mat
+  uploadId: 290123

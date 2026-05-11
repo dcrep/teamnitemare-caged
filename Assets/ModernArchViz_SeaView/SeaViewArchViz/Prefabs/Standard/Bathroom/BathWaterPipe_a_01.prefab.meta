@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: f72d89fb22597a5489e4db537bfdfc85
+timeCreated: 1507936861
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Prefabs/Standard/Bathroom/BathWaterPipe_a_01.prefab
+  uploadId: 290123

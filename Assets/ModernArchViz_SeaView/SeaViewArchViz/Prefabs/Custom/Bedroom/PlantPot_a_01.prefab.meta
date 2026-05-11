@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b118ca49f9b711c4fbd43b2ab1c4101a
+timeCreated: 1508025581
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Prefabs/Custom/Bedroom/PlantPot_a_01.prefab
+  uploadId: 290123

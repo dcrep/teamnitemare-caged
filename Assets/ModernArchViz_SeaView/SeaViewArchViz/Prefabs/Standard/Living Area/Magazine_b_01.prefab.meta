@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 8d7a61008d79db8419f2b98ca4c560fd
+timeCreated: 1507937737
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Prefabs/Standard/Living
+    Area/Magazine_b_01.prefab
+  uploadId: 290123

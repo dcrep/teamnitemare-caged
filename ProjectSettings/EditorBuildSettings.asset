@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_Scenes/MainMenu.unity
+    guid: 3b55c7f3b690668469095d1c9d7e26e2
+  - enabled: 1
+    path: Assets/_Scenes/Dorm.unity
+    guid: 7b8b2e7bcc4c4b24faf5c854e8b7e297
+  - enabled: 1
+    path: Assets/_Scenes/Nightmare.unity
+    guid: 8c686b44d20c5c54bb2eff18f5a8bf0a
+  - enabled: 1
+    path: Assets/_Scenes/PitchBlackX.unity
+    guid: 084b5c72056e49948b93ec81a6ecc702
+  - enabled: 1
+    path: Assets/_Scenes/FractureWIP.unity
+    guid: f9381edebe315314fb8551d64f54172c
+  - enabled: 1
+    path: Assets/_Scenes/Dialogue System 2.unity
+    guid: 787718afa64858049af3cd6a2ff61e03
+  - enabled: 1
+    path: Assets/_Scenes/birdCageRoom.unity
+    guid: ad1bb412df8a11b4fbd4e8646f6482ff
+  - enabled: 1
+    path: Assets/_Scenes/Dream.unity
+    guid: d7da102e086f7d84ca7105047790adf0
+  - enabled: 1
+    path: Assets/_Scenes/DORM3.unity
+    guid: 18550f8996b444741b04b4bcbbfa366c
+  - enabled: 1
+    path: Assets/_Scenes/Flying.unity
+    guid: b8bcf84b66e31dc45b58d894c5bd3c49
+  - enabled: 1
+    path: Assets/_Scenes/BalanceX.unity
+    guid: 28131038fac8bba4abe64cef6547ca3c
+  - enabled: 1
+    path: Assets/_Scenes/FractureTest.unity
+    guid: fea19949adab9fe4da5fcb7fe115f220
+  - enabled: 0
+    path: Assets/_Scenes/xMainMenuX.unity
+    guid: cf0d2519f912b1146833f241953bbb85
+  - enabled: 0
+    path: Assets/_Scenes/xDream.unity
+    guid: ccb006059b4706a47a4f8f42f0a7b439
+  - enabled: 0
+    path: Assets/3D set of stylized nature - GHIBLI style/Art/Demo/Overiew.unity
+    guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 0
+    path: Assets/_Scenes/xFractureWIP.unity
+    guid: eb49232ee71f9114d8a0283fe36d8334
+  m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: e733fc5e8db162f40a4fd4d7871f9296,
+      type: 2}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 73449240e72f708489bdba6d89f0264a,
+      type: 3}
+  m_UseUCBPForAssetBundles: 0

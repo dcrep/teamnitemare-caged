@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 0fa6ffa6435d4eb439706b8922f84f9c
+timeCreated: 1507938611
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Prefabs/Standard/Plants/Plant_Orchard_a_01.prefab
+  uploadId: 290123

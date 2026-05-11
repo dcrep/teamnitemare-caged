@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: db8243b846828f94bb0ec8f3bf1144e2
+timeCreated: 1507932363
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Materials/TextureAtlas_PropsMirror_01.mat
+  uploadId: 290123

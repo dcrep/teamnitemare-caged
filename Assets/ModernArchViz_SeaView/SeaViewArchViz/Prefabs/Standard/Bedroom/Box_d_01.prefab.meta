@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 260d6d06380082348b170cb7d76553c2
+timeCreated: 1507938009
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 103092
+  packageName: 'Modern ArchViz: Sea View'
+  packageVersion: 1.0
+  assetPath: Assets/ModernArchViz_SeaView/SeaViewArchViz/Prefabs/Standard/Bedroom/Box_d_01.prefab
+  uploadId: 290123
