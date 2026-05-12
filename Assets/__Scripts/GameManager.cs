@@ -15,6 +15,9 @@ using UnityEngine.SceneManagement;
 [Serializable]
 public class GameManager : MonoBehaviour
 {
+    //public delegate void PauseStateDelegate(bool isPaused);
+    //public static event PauseStateDelegate PauseStateChange;
+    public static event Action<bool> PauseStateChange;
     public static GameManager Instance { get; private set; }
 
     public InputManager inputManager;
@@ -549,6 +552,7 @@ public class GameManager : MonoBehaviour
             }
         }
         gameState.currentGameState = GameStates.Playing;
+        PauseStateChange?.Invoke(false);
     }
 
     public void PauseGame()
@@ -578,6 +582,7 @@ public class GameManager : MonoBehaviour
             {
                 Time.timeScale = 0f;
             }
+            PauseStateChange?.Invoke(true);
         }
     }
 

@@ -148,7 +148,6 @@ GameObject:
   - component: {fileID: 1985471575492744776}
   - component: {fileID: 8927096788471044002}
   - component: {fileID: 5575436024158794099}
-  - component: {fileID: 5133184416652695173}
   - component: {fileID: 803452705637481156}
   - component: {fileID: 4262500284190776115}
   m_Layer: 0
@@ -227,29 +226,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &5133184416652695173
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7178457256250653614}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: -0.05, z: 0}
 --- !u!143 &803452705637481156
 CharacterController:
   m_ObjectHideFlags: 0
@@ -289,11 +265,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCamera: {fileID: 7023657161891019773}
   moveSpeed: 5
+  crouchMoveSpeed: 2.5
   runSpeed: 8
   lookSpeed: 8
   jumpHeight: 1.4
   gravity: -20
   coyoteTime: 0.12
+  crouchHeight: 0.5
+  standHeight: 1.8
   walkSounds:
   - {fileID: 8300000, guid: 42e65e088b3f4374e851b8dbd38f3df9, type: 3}
   - {fileID: 8300000, guid: 8bc94ec6ed537e743b481638bdcd503d, type: 3}
@@ -307,6 +286,14 @@ MonoBehaviour:
   - {fileID: 8300000, guid: ab9637a2491abbf4ca9c9601321cbb88, type: 3}
   - {fileID: 8300000, guid: 50b288ce0d5ac1e439827c5365c74c31, type: 3}
   - {fileID: 8300000, guid: 3b09d59f4499d45428baa7a21e954296, type: 3}
+  crouchSounds:
+  - {fileID: 8300000, guid: 9b910aa79c186384cb17f28fad642b0a, type: 3}
+  - {fileID: 8300000, guid: 8a49e3e94b1e34e47bc5f47c5233c5a5, type: 3}
+  - {fileID: 8300000, guid: 3e0e4a1bf1a03c24a85ad855f4be231e, type: 3}
+  standSounds:
+  - {fileID: 8300000, guid: aac7fe48a39af6e46a2d48c5d2655976, type: 3}
+  - {fileID: 8300000, guid: e6f44b6fce71be34dbbd6d12cb3d3b8c, type: 3}
+  - {fileID: 8300000, guid: 9d46f9a0e3e8be44aa2dc581bd6e0c97, type: 3}
   runningSoundClip: {fileID: 8300000, guid: 1e53b70527b5f0447884b3b55365dd8d, type: 3}
   runningSoundVolume: 1
   walkSoundDistance: 1.8
