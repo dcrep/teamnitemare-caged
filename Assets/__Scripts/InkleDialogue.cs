@@ -288,7 +288,7 @@ public class InkleDialogue : MonoBehaviour
 
         ConfigureEventSystemForDialogue();
         SetupVariableListeners();
-        inkleUI.ShowDialogueInterface();
+        inkleUI.ShowDialogueInterface(true);
 
         GameManager.Instance.ModalDialogueSetIsOpen();
 

@@ -19,7 +19,8 @@ public class TimerObject : MonoBehaviour, ISaveable
             // if we restored state and triggerCount > 0, we assume the timer had already expired at least once, so we trigger the event immediately
             if (triggerCount > 0)
             {
-                onTimerExpire?.Invoke();
+                //! CHANGE: Unknown consequences on restore with timing of events etc
+                //onTimerExpire?.Invoke();
                 //! This is iffy as to timing..
                 if (restartAfterExpire)
                 {

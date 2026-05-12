@@ -450,6 +450,7 @@ public class GameState
                 if (taskInfo != null)
                 {
                     taskInfo.isCompleted = true;
+                    questInfo.numObjectivesCompleted++;
                     // make sure it wasn't the last one added
                     if (sceneQuestInfo.taskUniqueIdCompletionInOrder.Contains(taskUniqueId))
                     {

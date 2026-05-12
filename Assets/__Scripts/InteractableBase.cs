@@ -85,9 +85,10 @@ public abstract class InteractableBase : MonoBehaviour, ISaveable
         {
             if (interactionCount > 0)
             {
-                Interact(true);
+                //! NEW CHANGE - Interact order can be unpredictable on restore
+                //Interact(true);
                 // Interact will increment interactionCount (presumably, base class here)
-                interactionCount--;
+                //interactionCount--;
             }
         }
     }

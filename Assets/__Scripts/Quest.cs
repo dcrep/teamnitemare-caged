@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 
+// Note: QuestInfo defined in GameState module
+
 // TODO: Collectibles with same-name, count etc implementation(?)
 // for now, just use QuestComponent's questTaskTag to differentiate collectibles
 
@@ -352,27 +354,72 @@ public class Quest : MonoBehaviour, ISaveable
         data.taskGroup.onTasksCompleted = null;
         return data;
     }
+    // public string taskGroupName = "";
+    // public bool isCollectibleGroup = false;
+    // public bool completeReferencedTaskFirst = false;
+    // public TaskGroup taskObjectToCompleteFirst;
+    // public List<QuestComponent> taskObjects = new List<QuestComponent>();
+    // public bool autoActOnComplete = false;
+    // public UnityEvent onTasksCompleted = new UnityEvent();
+    // public bool actedOnComplete = false;
+    // public int taskMinimumForCompletion = 0;
+    // public int tasksCompleted = 0;
     public void RestoreState(object state)
     {
-        // if (state is QuestData data)
-        // {
-        //     sceneName = data.sceneName;
+        if (state is QuestData data)
+        {
+            sceneName = data.sceneName;
+            taskGroup.actedOnComplete = data.actedOnComplete;
+            taskGroup.tasksCompleted = data.taskGroup.tasksCompleted;
 
-        //     // This is pointless I realize since these are references that exist in the scene, I shouldn't have to add them back:
-        //     // data.taskGroup.taskObjects = new List<QuestComponent>();
-        //     // // find all QuestComponent objects matching the saved task group object ids and add them back to the task group
-        //     // // Needed because we can't save/restore references to scene objects, but using UniqueIDs we can locate them
-        //     // foreach (var go in FindObjectsByType<QuestComponent>(FindObjectsSortMode.None))
-        //     // {
-        //     //     // get index of the task object in the saved task group object ids, if it exists
-        //     //     int index = data.taskGroupObjectIds.IndexOf(go.uniqueID.ID);
-        //     //     if (index != -1)
-        //     //     {
-        //     //         data.taskGroup.taskObjects.Add(go);
-        //     //         Debug.Log("Restored task object with id: " + go.uniqueID.ID + " to quest: " + QuestName + " in scene: " + sceneName);
-        //     //     }
-        //     // }
-        //     // replace data that references scene objects with current level data
+            // go through GameState completed quests and remove from the tasks list 
+
+            // uniqueID might not be initialized yet, so we use the UniqueID component to get the ID for lookup in GameState
+            string uniqueID = questUniqueId == null ? GetComponent<UniqueID>().ID : questUniqueId.ID;
+
+            QuestInfo questInfo = GameManager.Instance.gameState.GetQuestInfo(sceneName, uniqueID);
+            if (questInfo == null)
+            {
+                Debug.LogError("Q->RestoreState: No QuestInfo found in GameState for quest: " + QuestName + " in scene: " + sceneName);
+                return;
+            }
+            // restore quest state from GameState QuestInfo
+            if (taskGroup.tasksCompleted != questInfo.numObjectivesCompleted)
+            {
+                Debug.LogWarning("Q->RestoreState: Mismatch between saved task completion count and GameState QuestInfo for quest: " + QuestName + " in scene: " + sceneName + ". Saved tasks completed: " + taskGroup.tasksCompleted + ", GameState tasks completed: " + questInfo.numObjectivesCompleted);
+                taskGroup.tasksCompleted = questInfo.numObjectivesCompleted;
+            }
+            if (questInfo.isCompleted)
+            {
+                Debug.Log("Q->RestoreState: Quest: " + QuestName + " in scene: " + sceneName + " is marked as completed in GameState. # tasks completed: " + questInfo.numObjectivesCompleted + "/" + questInfo.totalObjectives);
+            }
+            // remove completed tasks within taskGroup.taskObjects based on GameState QuestInfo
+            foreach(var questTask in questInfo.questTasks)
+            {
+                if (questTask.isCompleted)
+                {
+                    Debug.Log("Q->RestoreState: Removing completed task with id: " + questTask.taskUniqueId + " from quest: " + QuestName + " in scene: " + sceneName);
+                    // remove completed task within the list
+                    taskGroup.taskObjects.RemoveAt(taskGroup.taskObjects.FindIndex(qc => qc.SAFEGetUniqueID() == questTask.taskUniqueId));
+                }
+            }
+
+
+            // This is pointless I realize since these are references that exist in the scene, I shouldn't have to add them back:
+            // data.taskGroup.taskObjects = new List<QuestComponent>();
+            // // find all QuestComponent objects matching the saved task group object ids and add them back to the task group
+            // // Needed because we can't save/restore references to scene objects, but using UniqueIDs we can locate them
+            // foreach (var go in FindObjectsByType<QuestComponent>(FindObjectsSortMode.None))
+            // {
+            //     // get index of the task object in the saved task group object ids, if it exists
+            //     int index = data.taskGroupObjectIds.IndexOf(go.uniqueID.ID);
+            //     if (index != -1)
+            //     {
+            //         data.taskGroup.taskObjects.Add(go);
+            //         Debug.Log("Restored task object with id: " + go.uniqueID.ID + " to quest: " + QuestName + " in scene: " + sceneName);
+            //     }
+            // }
+            // replace data that references scene objects with current level data
         //     data.taskGroup.taskObjects = taskGroup.taskObjects;
         //     data.taskGroup.onTasksCompleted = taskGroup.onTasksCompleted;
         //     data.taskGroup.taskObjectToCompleteFirst = taskGroup.taskObjectToCompleteFirst;
@@ -382,19 +429,26 @@ public class Quest : MonoBehaviour, ISaveable
         //     taskGroup = data.taskGroup;
         //     taskGroup.actedOnComplete = data.actedOnComplete;
 
-        //     Debug.Log("Restored Quest: " + QuestName + " in scene: " + sceneName + ". Tasks remaining: " + TasksRemaining);
+        //     Debug.Log("Q->Restored Quest: " + QuestName + " in scene: " + sceneName + ". Tasks remaining: " + TasksRemaining);
         //     // redo any completion actions if needed
         //     if (taskGroup.actedOnComplete)
         //     {
-        //         Debug.Log("Restoring completed Quest: " + QuestName + " in scene: " + sceneName + ". INVOKING onTasksComplete.");
-        //         taskGroup.onTasksCompleted.Invoke();
+        //         //Debug.Log("Restoring completed Quest: " + QuestName + " in scene: " + sceneName + ". INVOKING onTasksComplete.");
+        //         //! Change - Invoke is 'playback' and we want to restore STATE
+        //         //taskGroup.onTasksCompleted.Invoke();
         //     }
-        //     Debug.Log("Restored Quest state for quest: " + QuestName + " in scene: " + sceneName + ". Tasks remaining: " + TasksRemaining);
+        //     Debug.Log("Q->Restored Quest state for quest: " + QuestName + " in scene: " + sceneName + ". Tasks remaining: " + TasksRemaining);
         // }
         // else
         // {
-        //     Debug.LogError("RestoreState: Invalid state object for Quest: " + QuestName + " in scene: " + sceneName);
+        //     Debug.LogError("Q->RestoreState: Invalid state object for Quest: " + QuestName + " in scene: " + sceneName);
         // }
+
+
+
+            Debug.Log("Q->Restored Quest state for quest: " + QuestName + " in scene: " + sceneName + " from GameState. Tasks remaining: " + TasksRemaining);
+
+        }
     }
 #endregion ISaveable implementation
 

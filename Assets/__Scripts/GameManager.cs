@@ -396,7 +396,7 @@ public class GameManager : MonoBehaviour
             int currentIndex = GameState.scenesSO.gameScenes.IndexOf(activeSceneName);
             if (currentIndex == -1)
             {
-                Debug.LogError("Current scene is marked as Game but not found in gameScenes list: " + activeSceneName);
+                Debug.LogError("GM->ReloadInternal: Current scene is marked as Game but not found in gameScenes list: " + activeSceneName);
                 currentIndex = 0; // default to first scene
             }
             else

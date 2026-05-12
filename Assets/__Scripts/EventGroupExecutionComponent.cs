@@ -15,7 +15,7 @@ public struct EventGroup
     public bool completed;
 }
 
-public class EventGroupExecutionComponent : MonoBehaviour
+public class EventGroupExecutionComponent : MonoBehaviour, ISaveable
 {
     public List<EventGroup> eventGroups = new List<EventGroup>();
 
@@ -211,5 +211,54 @@ public class EventGroupExecutionComponent : MonoBehaviour
             eventGroups[index].events.RemoveListener(action);
         }
     }
+#region ISaveable implementation
 
+    [Serializable]
+    public class EventGroupSaveData
+    {
+        public string groupName;
+        public bool completed;
+    }
+
+    [Serializable]
+    private class EventGroupExecutionComponentData
+    {
+    public int currentGroupIndex = 0;
+    public string currentGroupName = "";
+    public List<EventGroupSaveData> eventGroups = new List<EventGroupSaveData>();
+    }
+    public object CaptureState()
+    {
+        EventGroupExecutionComponentData data = new EventGroupExecutionComponentData();
+        data.currentGroupIndex = this.currentGroupIndex;
+        data.currentGroupName = this.currentGroupName;
+        for (int i = 0; i < eventGroups.Count; i++)
+        {
+            var group = eventGroups[i];
+            EventGroupSaveData groupData = new EventGroupSaveData();
+            groupData.groupName = group.groupName;
+            groupData.completed = group.completed;
+            data.eventGroups.Add(groupData);
+        }
+        return data;
+    }
+    public void RestoreState(object state)
+    {
+        if (state is EventGroupExecutionComponentData data)
+        {
+            this.currentGroupIndex = data.currentGroupIndex;
+            this.currentGroupName = data.currentGroupName;
+            for (int i = 0; i < eventGroups.Count; i++)
+            {
+                var group = eventGroups[i];
+                EventGroupSaveData groupData = data.eventGroups.Find(g => g.groupName == group.groupName);
+                if (groupData != null)
+                {
+                    group.completed = groupData.completed;
+                    eventGroups[i] = group;
+                }
+            }
+        }
+    }
+#endregion ISaveable implementation
 }

@@ -199,26 +199,23 @@ public class InkleUI : MonoBehaviour
         if (!isValid) return;
         for (int i = 0; i < layout.speakerPortraitPanels.Count; i++)
         {
+            Debug.Log("InkUI->Hiding speaker panel at index: " + i + " with name: " + layout.displayNameText[i].text);
             layout.speakerPortraitPanels[i].SetActive(false);
             layout.displayNamePanels[i].SetActive(false);
         }
         SpeakerPanelActive = false;
     }
 
-    public void ShowDialogueInterface()
+    public void ShowDialogueInterface(bool bypassChecks = false)
     {
-        if (DialoguePanelIsActive)
+        if (DialoguePanelIsActive && !bypassChecks)
         {
             return;
         }
         if (!isValid) return;
 
         ShowPanel();
-        for (int i = 0; i < layout.speakerPortraitPanels.Count; i++)
-        {
-            layout.speakerPortraitPanels[i].SetActive(false);
-            layout.displayNamePanels[i].SetActive(false);
-        }
+        HideAllSpeakerPanels();
         HideChoiceUI();
     }
 

@@ -21,6 +21,11 @@ public class QuestComponent : MonoBehaviour
             uniqueID = GetComponent<UniqueID>();
     }
 
+    public string SAFEGetUniqueID()
+    {
+        return uniqueID == null ? GetComponent<UniqueID>().ID : uniqueID.ID;
+    }
+
     // void OnValidate()
     // {
     //     // make sure COLLECTIBLE prefix is there if collectible
