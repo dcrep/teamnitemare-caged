@@ -25,6 +25,18 @@ using UnityEngine.UI;
 // on=exit collider to end dialogue..
 //TODO: animation? (fade-in/out of characters, move to left/center/right), audio? (dialogue,music,sfx), AudioSource
 
+//TODO: Use cases - renPy option, subtitles
+// Future Tags:
+//  #scale:x.xx
+//  #pos:x=-x.xx;y=-y.yy
+//  #vfx: fadeIn, fadeOut, slideLeft, slideRight (moving speaker location)
+//  #sfx: audioClip;vol:x.xx;tm:1.5-2.5 (or start-2.5/1.5-end)
+//  #vo: audioClip;vol:x.xx;tm:1.5-2.5 (or start-2.5/1.5-end) [maybe oneShot vs music/longer or looping audio options]
+//  #bg: backgroundImage (+vfx crossFade, etc)
+// Subtitle setup:
+// Tags for time #sub=1.5;2.5
+// OR include in start of dialogue like [1.5-2.5] subtitless..
+
 // special Inkle-related UnityEvents that take strings as parameters
 
 // string tagName
@@ -255,7 +267,15 @@ public class InkleDialogue : MonoBehaviour
     {
         StartDialogue(inkStoryJSON.text, inkStoryJSON.name);
     }
-    public void StartDialogue(string inkStoryJSON, string storyName)
+    public void StartDialogueAtKnot(TextAsset inkStoryJSON, string startingKnot)
+    {
+        StartDialogue(inkStoryJSON.text, inkStoryJSON.name, startingKnot);
+    }
+    public void StartDialogueAtKnot(string inkStoryJSON, string storyName, string startingKnot)
+    {
+        StartDialogue(inkStoryJSON, storyName, startingKnot);
+    }
+    public void StartDialogue(string inkStoryJSON, string storyName, string startingKnot = "")
     {
         Debug.Log("InkD-> Starting dialogue with story: " + storyName);
         if (DialogueIsPlaying)
@@ -285,6 +305,11 @@ public class InkleDialogue : MonoBehaviour
             else
                 Debug.LogError(msg);
         };
+
+        if (!string.IsNullOrEmpty(startingKnot))
+        {
+            currentStory.ChoosePathString(startingKnot);
+        }
 
         ConfigureEventSystemForDialogue();
         SetupVariableListeners();

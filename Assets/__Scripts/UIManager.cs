@@ -40,6 +40,10 @@ public class UIManager : MonoBehaviour
         // Do not search by name (unsafe). If no Canvas component exists, signal caller to handle it.
         return null;
     }
+    public void ResetCanvas()
+    {
+        UICanvas = null;
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

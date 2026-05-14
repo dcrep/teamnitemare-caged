@@ -111,12 +111,14 @@ public class ObjectsTracker : MonoBehaviour, ISaveable
                 {
                     if (stateObj.isDestroyed)
                     {
+                        Debug.Log("ObjT->RestoreState: Destroying tracked object " + obj.name);
                         obj.SetActive(false);
                         Destroy(obj);
                         continue;
                     }
                     else
                     {
+                        Debug.Log("ObjT->RestoreState: Restoring tracked object " + obj.name + " active: " + stateObj.isActive);
                         obj.SetActive(stateObj.isActive);
                         obj.transform.position = stateObj.position;
                         obj.transform.rotation = stateObj.rotation;
@@ -134,12 +136,14 @@ public class ObjectsTracker : MonoBehaviour, ISaveable
                 {
                     if (stateRb.isDestroyed)
                     {
+                        Debug.Log("ObjT->RestoreState: Destroying tracked rigid body game object " + rb.gameObject.name);
                         rb.gameObject.SetActive(false);
                         Destroy(rb.gameObject);
                         continue;
                     }
                     else
                     {
+                        Debug.Log("ObjT->RestoreState: Restoring tracked rigid body game object " + rb.gameObject.name + " active: " + stateRb.isActive);
                         rb.gameObject.SetActive(stateRb.isActive);
                         rb.transform.position = stateRb.position;
                         rb.transform.rotation = stateRb.rotation;

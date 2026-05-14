@@ -55,6 +55,27 @@ public enum GameStates
  };
 
  [Serializable]
+ public enum CollectibleTypes
+ {
+    None,
+    Abc,
+    Def,
+    Trinket,
+    Other
+ };
+
+[System.Flags]
+public enum SaveObjectStateFlags
+{
+    None = 0,
+    SavePosition = 1 << 0,
+    SaveRotation = 1 << 1,
+    SaveScale = 1 << 2,
+    SaveActiveState = 1 << 3,
+    SaveRigidBodyState = 1 << 4
+}
+
+ [Serializable]
  public class QuestTask
  {
     public string taskUniqueId;

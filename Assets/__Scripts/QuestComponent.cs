@@ -13,6 +13,11 @@ public class QuestComponent : MonoBehaviour
     public bool onceOnly = true;
     //public int count = 1;
 
+    CollectibleTypes collectibleType = CollectibleTypes.None;
+
+    public SaveObjectStateFlags autoSaveState = SaveObjectStateFlags.None;
+
+    public bool disableOnComplete = false;
     public bool destroyOnComplete = false;
 
     private void Awake()

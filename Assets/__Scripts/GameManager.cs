@@ -123,10 +123,10 @@ public class GameManager : MonoBehaviour
     // but SceneManager.SetActiveScene() will give that info, but needs Async and having 2 scenes loaded etc
     // https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager-activeSceneChanged.html
     // [UnityEngine.SceneManagement.Scene because of Scene class collision]
-    // private void OnActiveSceneChanged(UnityEngine.SceneManagement.Scene oldScene, UnityEngine.SceneManagement.Scene newScene)
-    // {
-    //     Debug.Log($"GM->Active scene changed: {oldScene.name} -> {newScene.name}");
-    // }
+    private void OnActiveSceneChanged(UnityEngine.SceneManagement.Scene oldScene, UnityEngine.SceneManagement.Scene newScene)
+    {
+        Debug.Log($"GM->Active scene changed: {oldScene.name} -> {newScene.name}");
+    }
 
     // Start - Called before the FIRST frame of *FIRST* Scene, not destroyed/recreated on other Scene loads
     void Start()
