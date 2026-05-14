@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.EventSystems;
+
+// Good info:
+// sceneCount, loadedSceneCount, GetSceneAt(), etc etc
+// https://docs.unity3d.com/6000.0/Documentation/ScriptReference/SceneManagement.SceneManager.html
 public class ScenesList : MonoBehaviour
 {
     [SerializeField] private List<SceneSerializer> scenes = new List<SceneSerializer>();
@@ -13,6 +17,7 @@ public class ScenesList : MonoBehaviour
 
     private GameObject currentEventSystem;
     private GameObject currentCamera;
+    private AudioListener currentAudioListener;
     private GameObject currentCanvas;
 
 
@@ -23,6 +28,11 @@ public class ScenesList : MonoBehaviour
         if (currentEventSystem == null)
         {
             Debug.LogWarning("ScenesList->Awake: No EventSystem found in the scene");
+        }
+        currentAudioListener = FindFirstObjectByType<AudioListener>();
+        if (currentAudioListener == null)
+        {
+            Debug.LogWarning("ScenesList->Awake: No AudioListener found in the scene");
         }
         currentCamera = Camera.main != null ? Camera.main.gameObject : null;
         if (currentCamera == null)
@@ -127,9 +137,9 @@ public class ScenesList : MonoBehaviour
             while (!asyncLoad.isDone)
             {
                 // load progress info
-                Debug.Log("Scene loading progress: " + (asyncLoad.progress * 100) + "%");
-                // wait for next frame
-                yield return null;
+                //Debug.Log("Scene loading progress: " + (asyncLoad.progress * 100) + "%");
+                // wait until end of frame to check again
+                yield return new WaitForEndOfFrame();
             }
         }
         // set the newly loaded scene as active
@@ -143,6 +153,7 @@ public class ScenesList : MonoBehaviour
         {
             Debug.LogError("WaitForSceneLoad: Loaded scene is not valid: " + sceneBeingLoaded);
         }
+        CameraDisable();
         // now unload in 10 seconds (just testing)
         Invoke(nameof(UnloadAddedSceneAsync), 10f);
     }
@@ -159,6 +170,7 @@ public class ScenesList : MonoBehaviour
                  SceneManager.SetActiveScene(loadedScene);
                  Debug.Log("OnSceneLoaded->Set active scene to: " + sceneBeingLoaded);
                  DisableCurrentSystems();
+                 CameraDisable();
              }
              else
              {
@@ -222,14 +234,28 @@ public class ScenesList : MonoBehaviour
         {
             currentEventSystem.SetActive(false);
         }
-        if (currentCamera != null)
+        if (currentAudioListener != null)
         {
-            currentCamera.SetActive(false);
+            currentAudioListener.enabled = false;
         }
+        // if (currentCamera != null)
+        // {
+        //     currentCamera.SetActive(false);
+        // }
         if (currentCanvas != null)
         {
             currentCanvas.SetActive(false);
             GameManager.Instance.uiManager.ResetCanvas();
+        }
+        // Start Coroutine to switch off camera next frame
+        //StartCoroutine(CameraDisable());
+    }
+    private void CameraDisable()
+    {
+        //
+        if (currentCamera != null)
+        {
+            currentCamera.SetActive(false);
         }
     }
     private void ReEnableCurrentSystems()
@@ -237,6 +263,10 @@ public class ScenesList : MonoBehaviour
         if (currentEventSystem != null)
         {
             currentEventSystem.SetActive(true);
+        }
+        if (currentAudioListener != null)
+        {
+            currentAudioListener.enabled = true;
         }
         if (currentCamera != null)
         {

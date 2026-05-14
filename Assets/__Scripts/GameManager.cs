@@ -11,6 +11,19 @@ using UnityEngine.SceneManagement;
 //using TMPro;
 
 // TODO: 'hubconnectedscene' minigames (going IN to a minigame scene, returing BACK to a scene)
+// TODO: Scene AsyncLoading and all the guard rails for it because of
+// "Awake" and possibly OnEnable() being called on all objects no matter which approach
+//! answer:  gameObject.scene.name gives the scene the script gameObject is in
+// Note that a script attached to prefabs needs to be tested with gameObject.scene.IsValid() 1st
+//! Possible answer:
+//SceneManager.sceneCount is SetApplicationVariable to total scenes including LOADING ones
+//SceneManager.loadedSceneCount is set to LOADED scenes but not ones still loading or in the process of unloading
+// at new single-mode scene start, sceneCount is 1 and loadedSceneCount is 0 !
+// Good info:
+// sceneCount, loadedSceneCount, GetSceneAt(), etc etc
+// https://docs.unity3d.com/6000.0/Documentation/ScriptReference/SceneManagement.SceneManager.html
+
+// Note that Scene() script reads currentScene but doesn't look for other scenes.. currently!
 
 [Serializable]
 public class GameManager : MonoBehaviour
@@ -83,14 +96,14 @@ public class GameManager : MonoBehaviour
         // fires after all objects exist and all Awake/OnEnable calls have completed, but before new scene becomes the active scene
         SceneManager.sceneLoaded += OnSceneLoaded;
         // fires after sceneLoaded and the active scene has changed, but still before Start()
-        //SceneManager.activeSceneChanged += OnActiveSceneChanged;
+        SceneManager.activeSceneChanged += OnActiveSceneChanged;
         SceneManager.sceneUnloaded += OnSceneUnloaded;
     }
     void OnDisable()
     {
         Debug.Log("GM->OnDisable()");
         SceneManager.sceneLoaded -= OnSceneLoaded;
-        //SceneManager.activeSceneChanged -= OnActiveSceneChanged;
+        SceneManager.activeSceneChanged -= OnActiveSceneChanged;
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
     }
 
@@ -285,10 +298,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void VerifyCurrentScene()
+    public void VerifyCurrentScene(string activeSceneNameOverride = null)
     {
         gameState.previousScene = gameState.currentScene;
-        string activeSceneName = SceneManager.GetActiveScene().name;
+        string activeSceneName = activeSceneNameOverride ?? SceneManager.GetActiveScene().name;
         if (activeSceneName == GameState.scenesSO.mainMenuScene)
         {
             if (gameState.currentScene != Scenes.MainMenu)
@@ -429,10 +442,13 @@ public class GameManager : MonoBehaviour
     }
 
    // Scene -> Scene script (in each level) calls the following Awake/Start/Destroyed functions
-    public void SceneAwake(Scene sceneScript)
+    public void SceneAwake(Scene sceneScript, string sceneName)
     {
-        string sceneName = SceneManager.GetActiveScene().name;
-        VerifyCurrentScene();
+        if (sceneName != SceneManager.GetActiveScene().name)
+        {
+            Debug.LogWarning("GM->SceneAwake(): sceneName parameter does not match active scene name: " + sceneName + " vs " + SceneManager.GetActiveScene().name);
+        }
+        VerifyCurrentScene(sceneName);
         Debug.Log("GM->SceneAwake() for scene: " + sceneName + " currentScene: " + gameState.currentScene.ToString());
         gameState.currentSceneScript = sceneScript;
 

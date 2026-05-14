@@ -10,7 +10,10 @@ using UnityEngine.UI;
 // TODO: 'hubconnectedscene' minigames (going IN to a minigame scene, returing BACK to this scene)
 // TODO: Restart should reset tasks/quests, which means using visit # in GameState
 // (or just have 1 visit)
-
+// TODO: Work with mutiple scenes (additive loaded)
+// Good info:
+// sceneCount, loadedSceneCount, GetSceneAt(), etc etc
+// https://docs.unity3d.com/6000.0/Documentation/ScriptReference/SceneManagement.SceneManager.html
 
 [Serializable]
 class SceneVisitTasks
@@ -61,7 +64,18 @@ public class Scene : MonoBehaviour
     
     void Awake()
     {
-        sceneName = SceneManager.GetActiveScene().name;
+        //sceneName = SceneManager.GetActiveScene().name;
+        Debug.Log("Scene->Awake: Scene: " + SceneManager.GetActiveScene().name + " gameObject.scene.name: " + gameObject.scene.name);
+        sceneName = gameObject.scene.name;
+
+        Debug.Log("SceneManager.sceneCount:" + SceneManager.sceneCount + ", .loadedSceneCount: " + SceneManager.loadedSceneCount);
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            UnityEngine.SceneManagement.Scene s = SceneManager.GetSceneAt(i);
+            // Note isLoaded returns False on Awake() for the active scene,
+            // probably related to the sceneLoaded callback (called after Awake & OnEnable but before Start)
+            Debug.Log("Scene at index " + i + ": " + s.name + ", isLoaded: " + s.isLoaded);
+        }
 
         // save reload/restart/hub-return state from GameManager (it resets them in SceneAwake, and adjusts visit count)
         sceneWasReloaded = GameManager.Instance.reloadCurrentSceneCalled;
@@ -70,7 +84,7 @@ public class Scene : MonoBehaviour
         //TODO: restoring game state
         restoredSavedGameState = GameManager.Instance.restoreSavedGameStateOnSceneLoad;
 
-        GameManager.Instance.SceneAwake(this);
+        GameManager.Instance.SceneAwake(this, sceneName);
 
         visitCount = GameManager.Instance.gameState.GetSceneVisitCount(sceneName);
         Debug.Log("Scene->Awake: Scene (after GM->SceneAwake): " + sceneName + ", Visit Count: " + visitCount);

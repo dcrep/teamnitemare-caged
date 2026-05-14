@@ -2211,6 +2211,8 @@ MonoBehaviour:
     _sceneName: MainMenu
   - _sceneAsset: {fileID: 102900000, guid: fea19949adab9fe4da5fcb7fe115f220, type: 3}
     _sceneName: FractureTest
+  - _sceneAsset: {fileID: 102900000, guid: 28131038fac8bba4abe64cef6547ca3c, type: 3}
+    _sceneName: BalanceX
 --- !u!4 &1227864436
 Transform:
   m_ObjectHideFlags: 0
@@ -2708,8 +2710,6 @@ MonoBehaviour:
   isCollectible: 0
   onceOnly: 1
   autoSaveState: 0
-  autoSaveEndState: 0
-  autoSaveEndTransform: 0
   disableOnComplete: 0
   destroyOnComplete: 1
 --- !u!114 &1338003856
@@ -2914,8 +2914,6 @@ MonoBehaviour:
   isCollectible: 0
   onceOnly: 1
   autoSaveState: 0
-  autoSaveEndState: 0
-  autoSaveEndTransform: 0
   disableOnComplete: 0
   destroyOnComplete: 0
 --- !u!114 &1350025402
@@ -4113,8 +4111,6 @@ MonoBehaviour:
   isCollectible: 0
   onceOnly: 1
   autoSaveState: 0
-  autoSaveEndState: 0
-  autoSaveEndTransform: 0
   disableOnComplete: 0
   destroyOnComplete: 0
 --- !u!114 &1754866090
@@ -4351,8 +4347,6 @@ MonoBehaviour:
   isCollectible: 0
   onceOnly: 1
   autoSaveState: 0
-  autoSaveEndState: 0
-  autoSaveEndTransform: 0
   disableOnComplete: 0
   destroyOnComplete: 0
 --- !u!114 &1822987217
@@ -4969,8 +4963,6 @@ MonoBehaviour:
   isCollectible: 0
   onceOnly: 1
   autoSaveState: 0
-  autoSaveEndState: 0
-  autoSaveEndTransform: 0
   disableOnComplete: 0
   destroyOnComplete: 0
 --- !u!114 &2097072588
