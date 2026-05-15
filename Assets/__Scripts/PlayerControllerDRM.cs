@@ -107,6 +107,8 @@ public class PlayerControllerDRM : MonoBehaviour
         walkSoundSource.playOnAwake = false;
         walkSoundSource.loop = false;
         walkSoundSource.spatialBlend = 0f;
+        // audio mixer -> AudioManager.sfxMixerGroup
+        walkSoundSource.outputAudioMixerGroup = AudioManager.sfxMixerGroup;
 
         if (runningSoundSource == null)
         {
@@ -116,6 +118,7 @@ public class PlayerControllerDRM : MonoBehaviour
         runningSoundSource.playOnAwake = false;
         runningSoundSource.loop = true;
         runningSoundSource.spatialBlend = 0f;
+        runningSoundSource.outputAudioMixerGroup = AudioManager.sfxMixerGroup;
         runningSoundSource.clip = runningSoundClip;
         runningSoundSource.volume = runningSoundVolume;
     }

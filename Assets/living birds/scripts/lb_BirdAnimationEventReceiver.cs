@@ -122,6 +122,7 @@ public class lb_BirdAnimationEventReceiver : MonoBehaviour
         source.maxDistance = PositionalMaxDistance;
         source.clip = clip;
         source.volume = Mathf.Max(0.0f, volume);
+        source.outputAudioMixerGroup = AudioManager.sfxMixerGroup;
         source.Play();
 
         Destroy(tempAudioObject, clip.length + 0.1f);

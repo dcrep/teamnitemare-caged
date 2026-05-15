@@ -774,21 +774,22 @@ public class lb_BirdExperiment : MonoBehaviour
         {
             return;
         }
+        AudioManager.PlaySoundAt3DPoint(clip, volume, worldPosition);
 
-        GameObject tempAudioObject = new GameObject("lb_birdPositionalAudio");
-        tempAudioObject.transform.position = worldPosition;
+        // GameObject tempAudioObject = new GameObject("lb_birdPositionalAudio");
+        // tempAudioObject.transform.position = worldPosition;
 
-        AudioSource source = tempAudioObject.AddComponent<AudioSource>();
-        source.playOnAwake = false;
-        source.spatialBlend = 1.0f;
-        source.rolloffMode = AudioRolloffMode.Logarithmic;
-        source.minDistance = Mathf.Max(0.01f, positionalAudioMinDistance);
-        source.maxDistance = Mathf.Max(source.minDistance + 0.01f, positionalAudioMaxDistance);
-        source.clip = clip;
-        source.volume = Mathf.Max(0.0f, volume);
-        source.Play();
+        // AudioSource source = tempAudioObject.AddComponent<AudioSource>();
+        // source.playOnAwake = false;
+        // source.spatialBlend = 1.0f;
+        // source.rolloffMode = AudioRolloffMode.Logarithmic;
+        // source.minDistance = Mathf.Max(0.01f, positionalAudioMinDistance);
+        // source.maxDistance = Mathf.Max(source.minDistance + 0.01f, positionalAudioMaxDistance);
+        // source.clip = clip;
+        // source.volume = Mathf.Max(0.0f, volume);
+        // source.Play();
 
-        Destroy(tempAudioObject, clip.length + 0.1f);
+        // Destroy(tempAudioObject, clip.length + 0.1f);
     }
 
     void ClearFeatherEmitters()

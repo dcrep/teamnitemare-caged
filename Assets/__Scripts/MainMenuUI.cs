@@ -8,6 +8,7 @@ public class MainMenuUI : MonoBehaviour
     private Button[] buttons;
     //public InputField playerNameInput;
 
+    // Slider must be between 0 and 1 (float)!
     public Slider mainVolumeSlider;
     public Slider mouseSensitivitySlider;
     public TMP_Text mouseSensitivityValueText;
@@ -58,12 +59,12 @@ public class MainMenuUI : MonoBehaviour
 
     public void ButtonSound()
     {
-        AudioManager.PlaySoundAt(AudioManager.uiAudioSourcesSO.UIMenuClick, 1f);
+        AudioManager.PlaySoundAt2DPoint(AudioManager.uiAudioSourcesSO.UIMenuClick, 1f);
     }
 
     public void CancelButtonSound()
     {
-        AudioManager.PlaySoundAt(AudioManager.uiAudioSourcesSO.UIMenuCancel, 1f);
+        AudioManager.PlaySoundAt2DPoint(AudioManager.uiAudioSourcesSO.UIMenuCancel, 1f);
     }
 
     public void MuteToggle(bool isMuted)

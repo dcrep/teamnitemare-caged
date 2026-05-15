@@ -38,8 +38,14 @@ public class Scene : MonoBehaviour
 
     [SerializeField] SceneVisitTasks onReloadTasks = new SceneVisitTasks() { visitCount = -1, onSceneAwake = new UnityEvent(), onSceneStart = new UnityEvent() };
 
+    [SerializeField] SceneVisitTasks onAdditiveLoadTasks = new SceneVisitTasks() { visitCount = -1, onSceneAwake = new UnityEvent(), onSceneStart = new UnityEvent() };
+
     [SerializeField] public Transform hubReturnPosition = null;
     [SerializeField] public GameObject hubReturnPlayerObject = null;
+
+    [SerializeField] AudioClip sceneMusicOrAmbience;
+    [SerializeField] bool playSceneMusicOnSceneStart = false;
+    [SerializeField] bool stopSceneMusicOnSceneEnd = true;
 
     string sceneName = "";  // set at Awake from SceneManager.GetActiveScene().name
 
@@ -203,6 +209,11 @@ public class Scene : MonoBehaviour
     {
         GameManager.Instance.SceneStart();
 
+        if (playSceneMusicOnSceneStart && sceneMusicOrAmbience != null)
+        {
+            AudioManager.Play(sceneMusicOrAmbience);
+        }
+
         onSceneStart.Invoke();
         if (SceneWasReloaded)
         {
@@ -216,6 +227,10 @@ public class Scene : MonoBehaviour
     void OnDestroy()
     {
         GameManager.Instance.SceneDestroyed();
+        if (stopSceneMusicOnSceneEnd)
+        {
+            AudioManager.Stop();
+        }
     }
 
 
@@ -328,12 +343,51 @@ public class Scene : MonoBehaviour
 #endregion GameManager Helpers
 
 #region AudioManager Helpers
-// keeping to 1-parameter functions for ease of use in UnityEvents
-    public void PlaySound(AudioClip clip)
+
+    public void SetMainVolume(float volume)
+    {
+        AudioManager.SetMainVolumeMixer(volume);
+    }
+    public void SetMusicVolume(float volume)
+    {
+        AudioManager.SetMusicVolume(volume);
+    }
+    public void SetSFXVolume(float volume)
+    {
+        AudioManager.SetSFXVolume(volume);
+    }
+    public void SetVoiceVolume(float volume)
+    {
+        AudioManager.SetVoiceVolume(volume);
+    }
+    public void PlaySceneClip()
+    {
+        if (sceneMusicOrAmbience != null)
+        {
+            AudioManager.Play(sceneMusicOrAmbience);
+        }
+        else
+        {
+            Debug.LogWarning("PlaySceneClip: No scene music set for Scene: " + sceneName);
+        }
+    }
+    public void StopSceneClip()
+    {
+        AudioManager.Stop();
+    }
+    public void PlayLongClip(AudioClip clip)
     {
         AudioManager.Play(clip);
     }
-    public void StopSound()
+    public void StopPlayingLongClip()
+    {
+        AudioManager.Stop();
+    }
+    public void PlayMusic(AudioClip clip)
+    {
+        AudioManager.Play(clip);
+    }
+    public void StopMusic()
     {
         AudioManager.Stop();
     }
