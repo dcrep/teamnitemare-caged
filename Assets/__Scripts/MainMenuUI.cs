@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public class MainMenuUI : MonoBehaviour
@@ -31,6 +32,17 @@ public class MainMenuUI : MonoBehaviour
         foreach (Button b in buttons)
         {
             b.onClick.AddListener(ButtonSound);
+            // add on mouse down listener
+                // EventTrigger trigger = b.gameObject.GetComponent<EventTrigger>();
+                // if (trigger == null)
+                // {
+                //     trigger = b.gameObject.AddComponent<EventTrigger>();
+                // }
+                // EventTrigger.Entry entry = new EventTrigger.Entry();
+                // entry.eventID = EventTriggerType.PointerDown;
+                // entry.callback.AddListener((data) => { ButtonSound(); });
+                // trigger.triggers.Add(entry);
+
         }
     }
 
